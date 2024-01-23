@@ -1,0 +1,3117 @@
+openapi: 3.1.0
+info:
+    title: "Clinica"
+    summary: "Applicacion para una clinica generica"
+    description: "En esta aplicacion se desarrollara compoennetes y modulos de software que se crean necesarios dentro del contexto de un dominio 'Clinica' generico"
+    contact:
+        name: Bautista
+        email: Batubasilio@hotmail.com
+    version: 1.0.0
+    license: 
+        name: "Apache 2.0"
+        url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+
+servers:
+    - url: "http://localhost:{port}/api/{basePath}"
+      variables:
+        port:
+            enum:
+                - '8080'
+                - '8081'
+            default: '8080'
+        basePath:
+            default: v1
+tags:
+    - name: "User" 
+    - name: "Login"
+    - name: "Patient"
+    - name: "Doctor"
+    - name: "Appointment"
+    - name: "Historical"
+    - name: "Medicine"
+    - name: "Prescription"
+
+
+components:
+    schemas:
+        UserDTO:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+                username:
+                    type: string
+                    descrtiption: Nombre de usuario
+                password:
+                    type: string
+                    maxLength: 10
+                    minLength: 6
+                    examples: [mpkJordan]
+                role:
+                    type: string
+                    examples: [ADMIN,USER]
+                    default: USER
+                    enum:
+                        - ADMIN
+                        - USER
+                status:
+                    type: string
+                    examples: [ENABLE, DISABLE, SUSPENDED]
+                    default: ENABLE
+                    enum:
+                        - ENABLE
+                        - DISABLE
+                        - SUSPENDED
+        
+                dateCreated:
+                    type: string
+                    format: date
+                dateDeleted:
+                    type: string
+                    format: date
+            required:
+                - id
+                - username
+                - password
+                - role
+                - status
+                - dateCreated
+
+        UserRequestDTO:
+            type: object
+            properties:
+                username:
+                    type: string
+                    description: Nombre de usuario
+                password:
+                    type: string
+                    maxLength: 10
+                    minLength: 6
+                    examples: [mpkJORNDAN]
+                role:
+                    type: string
+                    examples: [ADMIN,USER]
+                    default: USER
+                    enum:
+                        - ADMIN
+                        - USER
+                status:
+                    type: string
+                    examples: [ ENABLE, DISABLE, SUSPENDED ]
+                    default: ENABLE
+                    enum:
+                        - ENABLE
+                        - DISABLE
+                        - SUSPENDED
+                dateCreated:
+                    type: string
+                    format: date
+                dateDeleted:
+                    type: string
+                    format: date
+            required: 
+              - username
+              - password
+              - role
+              - dateCreated
+        
+        UserListDTO:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                       $ref: '#/components/schemas/UserDTO'
+
+        PatientDTO:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+                name:
+                    type: string
+                    description: Nombre del paciente
+                lastmane:
+                    type: string
+                    description: Apellido del paciente
+                dni:
+                    type: integer
+                    format: int32
+                    description: Nro de documento del paciente
+                birthdate:
+                    type: string
+                    format: date
+                    description: Fecha de nacimiento
+                gender:
+                    type: string
+                    description: Genero del paciente
+                    enum:
+                        - MALE
+                        - FEMALE
+                email:
+                    type: string
+                    format: email
+                    description: Email del usuario
+                telephones:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/TelephoneDTO'
+                address: 
+                    type: string
+                    description: Domicilio de la persona
+                    format: info
+                
+                dateCreated:
+                    type: string
+                    format: date
+                dateDeleted:
+                    type: string
+                    format: date
+            required:
+                - id
+                - name
+                - lastname
+                - dni
+                - birthdate
+                - gender
+                - address
+                - email
+                - dateCreated
+              
+        PatientRequestDTO:
+            type: object
+            properties:
+                name:
+                    type: string
+                    description: Nombre del paciente
+                lastmane:
+                    type: string
+                    description: Apellido del paciente
+                dni:
+                    type: integer
+                    format: int32
+                    description: Nro de documento del paciente
+                birthdate:
+                    type: string
+                    format: date
+                    description: Fecha de nacimiento
+                gender:
+                    type: string
+                    description: Genero del paciente
+                    enum:
+                        - MALE
+                        - FEMALE
+                email:
+                    type: string
+                    format: email
+                    description: Email del usuario
+                telephones:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/TelephoneDTO'
+                address: 
+                    type: string
+                    description: Domicilio de la persona
+                    format: info
+                dateCreated:
+                    type: string
+                    format: date
+                dateDeleted:
+                    type: string
+                    format: date
+            required:
+                - name
+                - lastname
+                - dni
+                - birthdate
+                - gender
+                - address
+                - email
+                - dateCreated
+                
+       
+        PatientListDTO:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/PatientDTO'
+
+        TelephoneDTO:
+            type: object
+            properties:
+                id:
+                    type: integer
+                areaCod:
+                    type: integer
+                    format: int32
+                    examples: [2342,2346,011]
+
+                number:
+                    type: integer
+                    fomat: int32
+                    examples: [454044]
+            required:
+                - id
+                - areaCod
+                - number
+        TelephoneRequestDTO:
+            type: object
+            properties:
+                areaCod:
+                    type: integer
+                    format: int32
+                    examples: [2342,2346,011]
+
+                number:
+                    type: integer
+                    fomat: int32
+                    examples: [454044]
+            required:
+                - areaCod
+                - number
+
+        DoctorDTO:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+                name: 
+                    type: string
+                    description: Nombre del doctor
+                lastname:
+                    type: string
+                    description: Apellido del doctor
+                userCredential:
+                    type: object
+                    description: 'Credenciales de usuario'
+                    $ref: '#/components/schemas/UserDTO'
+                dni:
+                    type: integer
+                    format: int32
+                    description: Documento del doctor
+                credentials:
+                    type: array
+                    $ref: '#/components/schemas/CredentialDTO'
+                telephones:
+                    type: object
+                    $ref: '#/components/schemas/TelephoneDTO'
+                email:
+                    type: string
+                    format: email
+                    description: Email del doctor
+                dateCreated:
+                    type: string
+                    format: date
+                dateDeleted:
+                    type: string
+                    format: date
+            required:
+                - id
+                - name
+                - lastname
+                - dni
+                - credentials
+                - telephones
+                - email
+                - dateCreated
+       
+        DoctorRequestDTO:
+            type: object
+            properties:
+                name: 
+                    type: string
+                    description: Nombre del doctor
+                lastname:
+                    type: string
+                    description: Apellido del doctor
+                userCredential:
+                    type: object
+                    description: 'Credenciales de usuario'
+                    $ref: '#/components/schemas/UserDTO'
+                dni:
+                    type: integer
+                    format: int32
+                    description: Documento del doctor
+                credentials:
+                    type: array
+                    $ref: '#/components/schemas/CredentialDTO'
+                telephones:
+                    type: object
+                    $ref: '#/components/schemas/TelephoneDTO'
+                email:
+                    type: string
+                    format: email
+                    description: Email del doctor
+                dateCreated:
+                    type: string
+                    format: date
+                dateDeleted:
+                    type: string
+                    format: date
+            required:
+                - name
+                - lastname
+                - dni
+                - especiality
+                - credentials
+                - telephones
+                - email
+                - dateCreated
+        
+        DoctorListDTO:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/DoctorDTO'
+        
+        CredentialDTO:
+            type: object
+            properties:
+                id:
+                    type: string
+                name_lastname: 
+                    type: string
+                    description: Nombre completo del doctor
+                licenseNumber:
+                    type: integer
+                    format: int32
+                    description: Numero de la licencia
+                especiality:
+                    type: string
+                    description: Indica la rama expecifica de la medicina en al que el medico está especializado
+                intitute:
+                    type: string
+                    description: Intitucion educativa 
+                graduationDate:
+                    type: string
+                    format: date
+            required:
+                - id
+                - name_lastname
+                - licenseNumber
+                - especiality
+                - institute
+                - graduationDate
+                
+        CredentialRequestDTO:
+            type: object
+            properties:
+                name_lastname: 
+                    type: string
+                    description: Nombre completo del doctor
+                licenseNumber:
+                    type: integer
+                    format: int32
+                    description: Numero de la licencia
+                especiality:
+                    type: string
+                    description: Indica la rama expecifica de la medicina en al que el medico está especializado
+                intitute:
+                    type: string
+                    description: Intitucion educativa 
+                graduationDate:
+                    type: string
+                    format: date
+            required:
+                - name_lastname
+                - licenseNumber
+                - especiality
+                - institute
+                - graduationDate
+        
+        AppointmentDTO:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+                patient:
+                    type: object
+                    $ref: '#/components/schemas/PatientDTO'
+                doctor:
+                    type: object
+                    $ref: '#/components/schemas/DoctorDTO'
+                appointment_Status:
+                    type: string
+                    enum: 
+                        - CONFIRMED
+                        - CANCELED
+                        - COMPLETED
+                appointment_date:
+                    type: string
+                    format: date
+                dateCreated:
+                    type: string
+                    format: date
+                dateDeleted:
+                    type: string
+                    format: date
+            required:
+                - id
+                - patient
+                - doctor
+                - appointment_Status
+                - appointment_date
+                - dateCreated
+                - dataDeleted
+                
+        AppointmentRequestDTO:
+            type: object
+            properties:
+                patient:
+                    type: object
+                    $ref: '#/components/schemas/PatientDTO'
+                doctor:
+                    type: object
+                    $ref: '#/components/schemas/DoctorDTO'
+                appointment_Status:
+                    type: string
+                    enum: 
+                        - CONFIRMED
+                        - CANCELED
+                        - COMPLETED
+                appointment_date:
+                    type: string
+                    format: date
+                    description: Fecha de la cita
+                dateCreated:
+                    type: string
+                    format: date
+                dateDeleted:
+                    type: string
+                    format: date
+            required:
+                - patient
+                - doctor
+                - appointment_Status
+                - appointment_date
+                - dateCreated
+                - dataDeleted
+
+        AppointmentListDTO:
+            type: object
+            properties:
+                $items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/AppointmentDTO'
+
+        HistoricalDTO:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64       
+                patient:
+                    type: object
+                    $ref: '#/components/schemas/PatientDTO'
+                appointment:
+                    type: object
+                    $ref: '#/components/schemas/AppointmentDTO'
+                diagnosis:
+                    type: string
+                    format: string
+                    examples: [Neumonía bacteriana]
+                treatment:
+                    type: string
+                    format: date
+                    examples: [Antibiòticos, Analgésicos, antipiréticos]
+                    description: Tratamiento iniciado por el medico
+                Prescription:
+                    type: object
+                    $ref: '#/components/schemas/PrescriptionDTO'
+                recomendeds:
+                    type: string
+                    format: date
+                    description: Recomendaciones del medico
+                result:
+                    type: string
+                    format: text
+                    description: resultados 
+
+        HistoricalRequestDTO:
+            type: object
+            properties:
+                patient:
+                    type: object
+                    $ref: '#/components/schemas/PatientDTO'
+                appointment:
+                    type: object
+                    $ref: '#/components/schemas/AppointmentDTO'
+                diagnosis:
+                    type: string
+                    format: date
+                    examples: [Neumonía bacteriana]
+                treatment:
+                    type: string
+                    format: date
+                    examples: [Antibiòticos, Analgésicos, antipiréticos]
+                    description: Tratamiento iniciado por el medico
+                Prescription:
+                    type: object
+                    $ref: '#/components/schemas/PrescriptionRequestDTO'
+                recomendeds:
+                    type: string
+                    format: date
+                    description: Recomendaciones del medico
+                result:
+                    type: string
+                    format: text
+                    description: resultados
+        
+        PrescriptionDTO:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+                medicine:
+                    type: object
+                    $ref: '#/components/schemas/MedicineDTO'
+                prescription_date:
+                    type: string
+                    format: date
+                    description: Fecha de creacion de la receta
+                dose:
+                    type: string
+                    examples: [2 pastillas, 200ml, etc]
+                    description: Dosis de la medicina
+                instructions:
+                    type: string
+                    format: text
+                    description: Instrucciones
+            required:
+                - id
+                - medicine
+                - prescription_date
+                - dose
+                - instruction
+        
+        PrescriptionListDTO:
+            type: object
+            properties:
+                items:
+                    $ref: '#/components/schemas/PrescriptionDTO'
+
+        PrescriptionRequestDTO:
+            type: object
+            properties:
+                medicine:
+                    type: object
+                    $ref: '#/components/schemas/MedicineDTO'
+                prescription_date:
+                    type: string
+                    format: date
+                    description: Fecha de creacion de la receta
+                dose:
+                    type: string
+                    examples: [2 pastillas, 200ml, etc]
+                    description: Dosis de la medicina
+                instructions:
+                    type: string
+                    format: text
+                    description: Instrucciones
+            required:
+                - medicine
+                - prescription_date
+                - dose
+                - instruction
+
+        MedicineDTO:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+                name:
+                    type: integer
+                    description: Nombre de la medicina
+                    exmaples: [Paracetamol, Ibuprofeno]
+                description_Medicine:
+                    type: string
+                    format: text
+                instruction:
+                    type: string
+                    format: text
+                dateCreated:
+                    type: string
+                    format: date
+                dateDeleted:
+                    type: string
+                    format: date
+
+            required:
+                - id
+                - name
+                - description_Medicine
+                - instruction
+                - dateCreated
+            
+        MedicineListDTO:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/MedicineDTO'
+        
+        MedicineRequestDTO:
+            type: object
+            properties:
+                name:
+                    type: integer
+                    description: Nombre de la medicina
+                    exmaples: [Paracetamol, Ibuprofeno]
+                description_Medicine:
+                    type: string
+                    format: text
+                instruction:
+                    type: string
+                    format: text
+                dateCreated:
+                    type: string
+                    format: date
+                dateDeleted:
+                    type: string
+                    format: date
+            required:
+                - name
+                - description_Medicine
+                - instruction
+                - dateCreate
+        
+        LoginDTO:
+            type: object
+            properties:
+                username:
+                    type: string
+                    description: Nombre de usuario
+                password:
+                    type: string
+                    maxLength: 10
+                    minLength: 6    
+
+        JWTResponseDTO:
+            type: object
+            properties:
+                accessToken:
+                    type: string
+                    description: Token de acceso
+                refreshToken:
+                    type: string
+                    description: Token de refresco
+        
+        EmptyResponseDTO:
+            type: object
+            properties:
+                date:
+                    type: string
+                    format: date-time
+                message:
+                    type: string
+                    default: Respuesta vacia
+
+        BadRequestErrorDTO:
+            type: object
+            properties:
+                error:
+                    type: string
+                    examples:   [Bad request] 
+                message:
+                    type: string
+                    examples: [La peticion no es valida, verificar los parametros de peticiones] 
+        NotFoundMessageDTO:
+            type: object
+            properties:
+                error:
+                    type: string
+                    examples:
+                        - NotFound
+                message:
+                    type: string
+                    examples:
+                        - The resources is not avalible
+        InternalErrorDTO:
+            type: object
+            properties:
+                error:
+                    type: string
+                    examples:
+                        - InternalServerError
+                message:
+                    type: string
+                    examples:
+                        - An error occurred on the server
+        UnAuthorizeRequestDTO:
+            type: object
+            properties:
+                error:
+                    type: string
+                    examples:
+                        - UnAuthorizeRequest
+                message:
+                    type: string
+                    examples:
+                        - UnAuthorized User to make a request
+
+
+paths:
+    /users/userCreate:
+        post:
+            tags:
+                - User
+            security:
+                - bearerAuth: []
+            summary: Crear usuario
+            description: Este end point ejecuta las rutinas de creacion de un usuario, con ncesidad de que el usuario se encuentre en el rango de administrador
+            operationId: createUser
+            requestBody:
+                description: Created user object
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserRequestDTO'
+            responses:
+                '200':
+                    description: Peticion coreccta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tien autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                400:
+                    description: 'Si la peticion no es correcta'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/BadRequestErrorDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'      
+    /users/findAll:
+        get:
+            tags:
+                - User
+            security:
+                - bearerAuth: []
+            summary: Retorna el listado de todos los usuarios
+            description: "Retorna el listado de todos los usuarios, Autenticacion requerida"  
+            operationId: retriveAllUser
+            responses:
+                200:
+                    description: Si la peticion es exitosa
+                    content: 
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserListDTO'
+                                    
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tien autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'     
+    /users/findUser/{userId}:
+        get:
+            tags:
+                - User
+            security:
+                - bearerAuth: []
+            summary: Retorna un usuario
+            description: Retorna un usuario el cual su id corresponda con el ingresado por URL
+            operationId: retriveUser
+            parameters:
+                - name: userId 
+                  in: path
+                  description: el ID del usuario
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO' 
+
+    /users/findUsers/{attribute}/{value}:
+        get:
+            tags:
+                - User
+            security:
+                - bearerAuth: []
+            summary: retrive a user with different value
+            description: retrive a user with different value, the authentication is necesary
+            operationId: retriveAttributeUser
+            parameters:
+                - name: attribute
+                  in: path
+                  required: true
+                  description: Tipo de atributo a buscar
+                  example: nombre
+                  schema:
+                    type: integer
+                    format: int32
+                - name: value
+                  in: path
+                  description: valor necesario para la busqueda
+                  example: bautista
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: "Si la peticon es correcta"
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    - $ref: '#/components/schemas/UserDTO'
+                                    - $ref: '#/components/schemas/UserListDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+
+    /users/userUpdate/{userId}:
+        put:
+            tags: 
+                - User
+            security:
+                - bearerAuth: []
+            summary: Actualizar usuario
+            description: Modificacion de usuarios
+            operationId: updateUser
+            parameters:
+                - name: userId
+                  in: path
+                  description: ID de usuario
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+            requestBody:
+                description: Paraemtro del body
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserDTO'
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+    /users/removeUser/{userId}:
+        delete:
+            tags:
+                - User
+            security:
+                - bearerAuth: []
+            summary: Remueve un usuario
+            description: Elimina un usuario del sistema
+            operationId: removeUser
+            parameters:
+                - name: userId 
+                  in: path
+                  description: el ID del usuario
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                message:
+                                    type: string
+                                    format: text
+                                    default: Usuario Eliminado
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+    /login/login:
+        post:
+            tags:
+                - Login
+            summary: User login
+            description: End point dedicado la el inicio de session
+            operationId: loginUser
+            requestBody:
+                description: Parametros de uso
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LoginDTO'
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/JWTResponseDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+
+    /login/refresh:
+        patch:
+            tags: 
+                - Login
+            security:
+                - bearerAuth: []
+            summary: refresh a token
+            description: Actualiza el token si este vencido
+            operationId: refeshToken
+            parameters:
+                - name: Authorization
+                  in: header
+                  description: authentication tokne
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                200: 
+                    description: Si la peticion es correcta y lso datos validos
+                    headers:
+                        Access-Token:
+                            schema:
+                                type: string
+                        Refresh-Token:
+                            schema:
+                                type: string
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/JWTResponseDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+
+    /doctors/doctorCreate:
+        post:
+            tags:
+                - Doctor
+            security:
+                - bearerAuth: []
+            summary: Create doctor
+            description: Este end pot esta destinado a ser utilizado para el registro de un nuevo medico
+            operationId: doctorCreate
+            requestBody:
+                description: Parametros de uso
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DoctorRequestDTO'
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DoctorDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tien autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                400:
+                    description: 'Si la peticion no es correcta'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/BadRequestErrorDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+
+    /doctors/findAll:
+        get:
+            tags:
+                - Doctor
+            security:
+                - bearerAuth: []
+            summary: Retorna el listado de todos los medicos
+            description: "Retorna el listado de todos los medicos, Autenticacion requerida"  
+            operationId: retriveAllDoctors
+            responses:
+                200:
+                    description: Si la peticion es exitosa
+                    content: 
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DoctorListDTO'
+                                    
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tien autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'     
+    /doctors/findDoctor/{doctorId}:
+        get:
+            tags:
+                - Doctor
+            security:
+                - bearerAuth: []
+            summary: Retorna un medico
+            description: Retorna un medico el cual su id corresponda con el ingresado por URL
+            operationId: retriveDoctor
+            parameters:
+                - name: doctorId 
+                  in: path
+                  description: el ID del medico
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DoctorDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO' 
+
+    /doctors/findDoctors/{attribute}/{value}:
+        get:
+            tags:
+                - Doctor
+            security:
+                - bearerAuth: []
+            summary: retrive a doctor with different value
+            description: retrive a doctor with different value, the authentication is necesary
+            operationId: retriveAttributeDoctor
+            parameters:
+                - name: attribute
+                  in: path
+                  required: true
+                  description: Tipo de atributo a buscar
+                  example: nombre
+                  schema:
+                    type: integer
+                    format: int32
+                - name: value
+                  in: path
+                  description: valor necesario para la busqueda
+                  example: bautista
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: "Si la peticon es correcta"
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    - $ref: '#/components/schemas/DoctorDTO'
+                                    - $ref: '#/components/schemas/DoctorListDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+    
+    /doctors/doctorUpdate/{doctorId}:
+        put:
+            tags: 
+                - Doctor
+            security:
+                - bearerAuth: []
+            summary: Actualizar medico
+            description: Modificacion de medico
+            operationId: updateDoctor
+            parameters:
+                - name: doctorId
+                  in: path
+                  description: ID de medico
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+            requestBody:
+                description: Parametro del body
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DoctorDTO'
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DoctorDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+
+    /doctors/removeDoctor/{doctorId}:
+        delete:
+            tags:
+                - Doctor
+            security:
+                - bearerAuth: []
+            summary: Remueve un medico
+            description: Elimina un medico del sistema
+            operationId: removeDoctor
+            parameters:
+                - name: doctorId 
+                  in: path
+                  description: el ID del paciente
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                message:
+                                    type: string
+                                    format: text
+                                    default: Paciente eliminado
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+    /patients/patientCreate:
+        post:
+            tags:
+                - Patient
+            security:
+                - bearerAuth: []
+            summary: Create patient
+            description: Este end pot esta destinado a ser utilizado para el registro de un nuevo paciente
+            operationId: patientCreate
+            requestBody:
+                description: Parametros de uso
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PatientRequestDTO'
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PatientDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tien autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                400:
+                    description: 'Si la peticion no es correcta'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/BadRequestErrorDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+
+    /patients/findAll:
+        get:
+            tags:
+                - Patient
+            security:
+                - bearerAuth: []
+            summary: Retorna el listado de todos los pacientes
+            description: "Retorna el listado de todos los pacientes, Autenticacion requerida"  
+            operationId: retriveAllPatients
+            responses:
+                200:
+                    description: Si la peticion es exitosa
+                    content: 
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PatientListDTO'
+                                    
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tien autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'     
+    /patients/findPatients/{patientId}:
+        get:
+            tags:
+                - Patient
+            security:
+                - bearerAuth: []
+            summary: Retorna un Paciente 
+            description: Retorna un paciente el cual su id corresponda con el ingresado por URL
+            operationId: retrivePatient
+            parameters:
+                - name: patientId 
+                  in: path
+                  description: el ID del paciente
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PatientDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO' 
+
+    /patients/findPatients/{attribute}/{value}:
+        get:
+            tags:
+                - Patient
+            security:
+                - bearerAuth: []
+            summary: retrive a patient with different value
+            description: retrive a patient with different value, the authentication is necesary
+            operationId: retriveAttributePatient
+            parameters:
+                - name: attribute
+                  in: path
+                  required: true
+                  description: Tipo de atributo a buscar
+                  example: nombre
+                  schema:
+                    type: integer
+                    format: int32
+                - name: value
+                  in: path
+                  description: valor necesario para la busqueda
+                  example: bautista
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: "Si la peticon es correcta"
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    - $ref: '#/components/schemas/PatientDTO'
+                                    - $ref: '#/components/schemas/PatientListDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+    
+    /patients/patientUpdate/{patientId}:
+        put:
+            tags: 
+                - Patient
+            security:
+                - bearerAuth: []
+            summary: Actualizar paciente
+            description: Modificacion de paciente
+            operationId: updatePatient
+            parameters:
+                - name: patientId
+                  in: path
+                  description: ID de paciente
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+            requestBody:
+                description: Parametro del body
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PatientDTO'
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PatientDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+                                
+    /patients/removePatient/{patientId}:
+        delete:
+            tags:
+                - Patient
+            security:
+                - bearerAuth: []
+            summary: Remueve un paciente
+            description: Elimina un paciente del sistema
+            operationId: removePatient
+            parameters:
+                - name: patientId 
+                  in: path
+                  description: el ID del paciente
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                message:
+                                    type: string
+                                    format: text
+                                    default: Paciente eliminado
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+
+    
+    /appointments/appointmentCreate:
+        post:
+            tags:
+                - Appointment
+            security:
+                - bearerAuth: []
+            summary: Create appointment
+            description: Este end point esta destinado a ser utilizado para el registro de una nueva cita
+            operationId: appointmentCreate
+            requestBody:
+                description: Parametros de uso
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AppointmentRequestDTO'
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AppointmentDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tien autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                400:
+                    description: 'Si la peticion no es correcta'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/BadRequestErrorDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+
+    /appointments/findAll:
+        get:
+            tags:
+                - Appointment
+            security:
+                - bearerAuth: []
+            summary: Retorna el listado de todas las citas
+            description: "Retorna el listado de todas las citas, Autenticacion requerida"  
+            operationId: retriveAllAppointments
+            responses:
+                200:
+                    description: Si la peticion es exitosa
+                    content: 
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AppointmentListDTO'
+                                    
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tien autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'     
+
+    /appointments/findAppointments/{appointmentId}:
+        get:
+            tags:
+                - Appointment
+            security:
+                - bearerAuth: []
+            summary: Retorna una cita
+            description: Retorna una cita el cual su id corresponda con el ingresado por URL
+            operationId: retriveAppointments
+            parameters:
+                - name: appointmentId 
+                  in: path
+                  description: el ID de la cita
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AppointmentDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO' 
+
+    /appointments/findAppointments/{attribute}/{value}:
+        get:
+            tags:
+                - Appointment
+            security:
+                - bearerAuth: []
+            summary: retrive a appointment with different value
+            description: retrive a appointments with different value, the authentication is necesary
+            operationId: retriveAttributeAppointments
+            parameters:
+                - name: attribute
+                  in: path
+                  required: true
+                  description: Tipo de atributo a buscar
+                  example: nombre
+                  schema:
+                    type: integer
+                    format: int32
+                - name: value
+                  in: path
+                  description: valor necesario para la busqueda
+                  example: bautista
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: "Si la peticon es correcta"
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    - $ref: '#/components/schemas/AppointmentDTO'
+                                    - $ref: '#/components/schemas/AppointmentListDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+    
+    /appointments/appointmentsUpdate/{appointmentsId}:
+        put:
+            tags: 
+                - Appointment
+            security:
+                - bearerAuth: []
+            summary: Actualizar cita
+            description: Modificacion de cita
+            operationId: updateAppointments
+            parameters:
+                - name: appointmentsId
+                  in: path
+                  description: ID de la cita
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+            requestBody:
+                description: Parametro del body
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AppointmentDTO'
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AppointmentDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+                                
+    /appointments/removeAppointments/{appointmentId}:
+        delete:
+            tags:
+                - Appointment
+            security:
+                - bearerAuth: []
+            summary: Remueve un cita
+            description: Elimina una cita del sistema
+            operationId: removeAppointment
+            parameters:
+                - name: appointmentId 
+                  in: path
+                  description: el ID del cita
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                message:
+                                    type: string
+                                    format: text
+                                    default: Cita eliminada
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+
+    /Historicals/historicalCreate:
+        post:
+            tags:
+                - Historical
+            security:
+                - bearerAuth: []
+            summary: Create history
+            description: Este end point esta destinado a ser utilizado para el registro de un historico medico
+            operationId: historicalCreate
+            requestBody:
+                description: Parametros de uso
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/HistoricalRequestDTO'
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/HistoricalDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tien autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                400:
+                    description: 'Si la peticion no es correcta'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/BadRequestErrorDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+
+    /Historicals/findAll:
+        get:
+            tags:
+                - Historical
+            security:
+                - bearerAuth: []
+            summary: Retorna el listado de todos los historicos
+            description: "Retorna el listado de todos los historicos, Autenticacion requerida"  
+            operationId: retriveAllHistorical
+            responses:
+                200:
+                    description: Si la peticion es exitosa
+                    content: 
+                        application/json:
+                            schema:
+                                items:
+                                    type: object
+                                    $ref: '#/components/schemas/HistoricalDTO'
+                                    
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tien autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'     
+
+    /historicals/findHistoricals/{historicalsId}:
+        get:
+            tags:
+                - Historical
+            security:
+                - bearerAuth: []
+            summary: Retorna un historico
+            description: Retorna un historico el cual su id corresponda con el ingresado por URL
+            operationId: retriveHistorical
+            parameters:
+                - name: historicalsId 
+                  in: path
+                  description: el ID del historico
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/HistoricalDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO' 
+
+    /historicals/findHistoricals/{attribute}/{value}:
+        get:
+            tags:
+                - Historical
+            security:
+                - bearerAuth: []
+            summary: retrive a hisotircal with different value
+            description: retrive a historicals with different value, the authentication is necesary
+            operationId: retriveAttributeHistoricals
+            parameters:
+                - name: attribute
+                  in: path
+                  required: true
+                  description: Tipo de atributo a buscar
+                  example: nombre
+                  schema:
+                    type: integer
+                    format: int32
+                - name: value
+                  in: path
+                  description: valor necesario para la busqueda
+                  example: bautista
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: "Si la peticon es correcta"
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    - $ref: '#/components/schemas/HistoricalDTO'
+                                    - items:
+                                        type: object
+                                        $ref: '#/components/schemas/HistoricalDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+    
+    /historicals/historicalsUpdate/{historicalsId}:
+        put:
+            tags: 
+                - Historical
+            security:
+                - bearerAuth: []
+            summary: Actualizar historico
+            description: Modificacion del historico
+            operationId: updateHistoricals
+            parameters:
+                - name: historicalsId
+                  in: path
+                  description: ID de la cita
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+            requestBody:
+                description: Parametro del body
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/HistoricalDTO'
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/HistoricalDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+                                
+    /historicals/removeHistorical/{historicalsId}:
+        delete:
+            tags:
+                - Historical
+            security:
+                - bearerAuth: []
+            summary: Remueve un historico
+            description: Elimina un historico el sistema
+            operationId: removeHistorical
+            parameters:
+                - name: historicalsId 
+                  in: path
+                  description: el ID del cita
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                message:
+                                    type: string
+                                    format: text
+                                    default: Historico Eliminado
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+
+    /medicines/medicineCreate:
+        post:
+            tags:
+                - Medicine
+            security:
+                - bearerAuth: []
+            summary: Create medicine
+            description: Este end point esta destinado a ser utilizado para el registro de un medicamento
+            operationId: medicineCreate
+            requestBody:
+                description: Parametros de uso
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/MedicineRequestDTO'
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/MedicineDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tien autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                400:
+                    description: 'Si la peticion no es correcta'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/BadRequestErrorDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+
+    /medicines/findAll:
+        get:
+            tags:
+                - Medicine
+            security:
+                - bearerAuth: []
+            summary: Retorna el listado de todos los medicamentos
+            description: "Retorna el listado de todos los medicamentos, Autenticacion requerida"  
+            operationId: retriveAllMedicine
+            responses:
+                200:
+                    description: Si la peticion es exitosa
+                    content: 
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/MedicineListDTO'
+                                    
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tien autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'     
+
+    /medicines/findMedicines/{medicinesId}:
+        get:
+            tags:
+                - Medicine
+            security:
+                - bearerAuth: []
+            summary: Retorna un medicamento
+            description: Retorna un medicamento el cual su id corresponda con el ingresado por URL
+            operationId: retriveMedicine
+            parameters:
+                - name: medicinesId 
+                  in: path
+                  description: el ID del historico
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/MedicineDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO' 
+
+    /medicines/findMedicines/{attribute}/{value}:
+        get:
+            tags:
+                - Medicine
+            security:
+                - bearerAuth: []
+            summary: retrive a Medicine with different value
+            description: retrive a Medicines with different value, the authentication is necesary
+            operationId: retriveAttributeMedicines
+            parameters:
+                - name: attribute
+                  in: path
+                  required: true
+                  description: Tipo de atributo a buscar
+                  example: nombre
+                  schema:
+                    type: integer
+                    format: int32
+                - name: value
+                  in: path
+                  description: valor necesario para la busqueda
+                  example: bautista
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: "Si la peticon es correcta"
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    - $ref: '#/components/schemas/MedicineDTO'
+                                    - $ref: '#/components/schemas/MedicineListDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+    
+    /medicines/medicinesUpdate/{medicinesId}:
+        put:
+            tags: 
+                - Medicine
+            security:
+                - bearerAuth: []
+            summary: Actualizar medicamento
+            description: Medicamento del historico
+            operationId: updateMedicines
+            parameters:
+                - name: medicinesId
+                  in: path
+                  description: ID del medicamento
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+            requestBody:
+                description: Parametro del body
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/MedicineDTO'
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/MedicineDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+                                
+    /medicines/removeMedicine/{medicinesId}:
+        delete:
+            tags:
+                - Medicine
+            security:
+                - bearerAuth: []
+            summary: Remueve un medicamento
+            description: Elimina un medicamento el sistema
+            operationId: removeMedicine
+            parameters:
+                - name: medicinesId 
+                  in: path
+                  description: el ID del medicamento
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                message:
+                                    type: string
+                                    format: text
+                                    default: Medicamento eliminado
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+
+    /prescriptions/prescriptionCreate:
+        post:
+            tags:
+                - Prescription
+            security:
+                - bearerAuth: []
+            summary: Create prescription
+            description: Este end point esta destinado a ser utilizado para el registro de una prescripcion
+            operationId: prescriptionCreate
+            requestBody:
+                description: Parametros de uso
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/MedicineRequestDTO'
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/MedicineDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tien autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                400:
+                    description: 'Si la peticion no es correcta'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/BadRequestErrorDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+
+    /prescriptions/findAll:
+        get:
+            tags:
+                - Prescription
+            security:
+                - bearerAuth: []
+            summary: Retorna el listado de todas las prescripciones
+            description: "Retorna el listado de todas las prescripciones, Autenticacion requerida"  
+            operationId: retriveAllPrescriptions
+            responses:
+                200:
+                    description: Si la peticion es exitosa
+                    content: 
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PrescriptionListDTO'
+                                    
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tien autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'     
+
+    /prescriptions/findPrescriptions/{prescriptionsId}:
+        get:
+            tags:
+                - Prescription
+            security:
+                - bearerAuth: []
+            summary: Retorna una prescripcion
+            description: Retorna un prescripcion el cual su id corresponda con el ingresado por URL
+            operationId: retrivePrescription
+            parameters:
+                - name: prescriptionsId 
+                  in: path
+                  description: el ID de la prescripcion
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PrescriptionDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO' 
+
+    /prescriptions/findPrescriptions/{attribute}/{value}:
+        get:
+            tags:
+                - Prescription
+            security:
+                - bearerAuth: []
+            summary: retrive a prescriptions with different value
+            description: retrive a prescription with different value, the authentication is necesary
+            operationId: retriveAttributePrescription
+            parameters:
+                - name: attribute
+                  in: path
+                  required: true
+                  description: Tipo de atributo a buscar
+                  example: nombre
+                  schema:
+                    type: integer
+                    format: int32
+                - name: value
+                  in: path
+                  description: valor necesario para la busqueda
+                  example: bautista
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: "Si la peticon es correcta"
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    - $ref: '#/components/schemas/PrescriptionDTO'
+                                    - $ref: '#/components/schemas/PrescriptionListDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+    
+    /prescriptions/prescriptionsUpdate/{prescriptionsId}:
+        put:
+            tags: 
+                - Prescription
+            security:
+                - bearerAuth: []
+            summary: Actualizar prescripcion
+            description: Acutalizar prescripcion
+            operationId: updatePrescriptions
+            parameters:
+                - name: prescriptionsId
+                  in: path
+                  description: ID de la prescripcion
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+            requestBody:
+                description: Parametro del body
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PrescriptionDTO'
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PrescriptionDTO'
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+                                
+    /prescriptions/removePrescriptions/{prescriptionsId}:
+        delete:
+            tags:
+                - Prescription
+            security:
+                - bearerAuth: []
+            summary: Remueve una prescripcion
+            description: Elimina una prescripcion el sistema
+            operationId: removePrescription
+            parameters:
+                - name: prescriptionsId 
+                  in: path
+                  description: el ID de la prescripcion
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                message:
+                                    type: string
+                                    format: text
+                                    default: Prescripcion eliminada
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
