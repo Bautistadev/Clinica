@@ -1,29 +1,55 @@
 package com.SpringBoot.Clinica.Repository;
 
 
-import com.SpringBoot.Clinica.model.UserDTO;
+import com.SpringBoot.Clinica.Entity.UserEntity;
+import com.SpringBoot.Clinica.Excepcion.DataException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 
+public class UserRepository implements CrudRepository<UserEntity, Integer> {
 
-public class UserRepository implements  CrudRepository<UserDTO,Integer>{
 
+    private JdbcTemplate jdbcTemplate;
+    private PasswordEncoder passwordEncoder;
+
+
+    @Value("${spring.db.insert}")
+    private static String SAVE;
+
+    public UserRepository(JdbcTemplate jdbcTemplate,PasswordEncoder passwordEncoder) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
-    public <S extends UserDTO> S save(S entity) {
+    public <S extends UserEntity> S save(S entity){
+
+
+        this.jdbcTemplate.update(SAVE,
+                entity.getUsername(),
+                entity.getPassword(),
+                entity.getRole(),
+                entity.getStatus(),
+                entity.getDateCreated()
+                );
+
+        return entity;
+    }
+
+    @Override
+    public <S extends UserEntity> Iterable<S> saveAll(Iterable<S> entities) {
         return null;
     }
 
     @Override
-    public <S extends UserDTO> Iterable<S> saveAll(Iterable<S> entities) {
-        return null;
-    }
-
-    @Override
-    public Optional<UserDTO> findById(Integer integer) {
+    public Optional<UserEntity> findById(Integer integer) {
         return Optional.empty();
     }
 
@@ -33,12 +59,12 @@ public class UserRepository implements  CrudRepository<UserDTO,Integer>{
     }
 
     @Override
-    public Iterable<UserDTO> findAll() {
+    public Iterable<UserEntity> findAll() {
         return null;
     }
 
     @Override
-    public Iterable<UserDTO> findAllById(Iterable<Integer> integers) {
+    public Iterable<UserEntity> findAllById(Iterable<Integer> integers) {
         return null;
     }
 
@@ -53,7 +79,7 @@ public class UserRepository implements  CrudRepository<UserDTO,Integer>{
     }
 
     @Override
-    public void delete(UserDTO entity) {
+    public void delete(UserEntity entity) {
 
     }
 
@@ -63,7 +89,7 @@ public class UserRepository implements  CrudRepository<UserDTO,Integer>{
     }
 
     @Override
-    public void deleteAll(Iterable<? extends UserDTO> entities) {
+    public void deleteAll(Iterable<? extends UserEntity> entities) {
 
     }
 
