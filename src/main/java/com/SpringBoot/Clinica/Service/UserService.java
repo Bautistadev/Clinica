@@ -1,2 +1,3 @@
-package com.SpringBoot.Clinica.Service;public class UserService {
+package com.SpringBoot.Clinica.Service;
+public class UserService {
 }
