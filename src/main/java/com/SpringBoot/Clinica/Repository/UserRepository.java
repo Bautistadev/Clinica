@@ -5,43 +5,40 @@ import com.SpringBoot.Clinica.Entity.Enum.Role;
 import com.SpringBoot.Clinica.Entity.Enum.Status;
 import com.SpringBoot.Clinica.Entity.UserEntity;
 
-import com.SpringBoot.Clinica.Exception.DataException;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 
 
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Optional;
 
-
+@Repository
 public class UserRepository implements CrudRepository<UserEntity, Integer> {
 
 
     private JdbcTemplate jdbcTemplate;
-    private PasswordEncoder passwordEncoder;
 
-
-    @Value("${spring.db.user.insert}")
-    private static String SAVE;
+   // @Value("${spring.db.user.insert}")
+    private  String SAVE = "INSERT INTO User(username,password,role,status,dateCreated) VALUES(?,?,?,?,?)";
     @Value("${spring.db.user.findAll}")
-    private static String SELECT_ALL;
+    private String SELECT_ALL;
     @Value("${spring.db.user.findById}")
-    private static String SELECT_BY_ID;
+    private String SELECT_BY_ID;
+    @Value("${spring.db.user.findByUsername}")
+    private String SELECT_BY_USERNAME;
     @Value("${spring.db.user.delete}")
-    private static String DELETE;
+    private String DELETE;
     @Value("${spring.db.user.countUser}")
-    private static String COUNT_USERS;
+    private String COUNT_USERS;
 
-    public UserRepository(JdbcTemplate jdbcTemplate,PasswordEncoder passwordEncoder) {
+    public UserRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.passwordEncoder = passwordEncoder;
+
     }
 
 
@@ -59,8 +56,8 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
             this.jdbcTemplate.update(SAVE,
                     entity.getUsername(),
                     entity.getPassword(),
-                    entity.getRole(),
-                    entity.getStatus(),
+                    entity.getRole().getRoleName(),
+                    entity.getStatus().getStatusName(),
                     entity.getDateCreated()
             );
         }else{
@@ -115,7 +112,7 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
 
     @Override
     public boolean existsById(Integer integer) {
-        return this.jdbcTemplate.queryForObject(COUNT_USERS.concat(" WHERE id = "),(rs,rowNum) -> {
+        return this.jdbcTemplate.queryForObject(COUNT_USERS.concat(" WHERE id = ? "),(rs,rowNum) -> {
 
             if(rs.getInt("count") == 0)
                 return false;
@@ -177,9 +174,8 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
 
     @Override
     public long count() {
-        return this.jdbcTemplate.query(COUNT_USERS,(rs -> {
-            return rs.getLong("count");
-        }));
+
+        return this.jdbcTemplate.queryForObject(COUNT_USERS, Long.class);
     }
 
     @Override
@@ -214,4 +210,54 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
     public void deleteAll() {
 
     }
+
+    public Optional<UserEntity> findByUsername(String username){
+        try {
+            UserEntity user = this.jdbcTemplate.queryForObject(SELECT_BY_USERNAME, (rs, rowNum) -> {
+                UserEntity userEntity = UserEntity.builder()
+                        .id(rs.getInt("id"))
+                        .username(rs.getString("username"))
+                        .password(rs.getString("password"))
+                        .dateCreated(LocalDate.parse(rs.getString("dateCreated")))
+                        .build();
+
+                /**DATE DELETED*/
+                if (rs.getString("dateDeleted") != null) {
+                    userEntity.setDateDeleted(LocalDate.parse(rs.getString("dateDeleted")));
+                } else {
+                    userEntity.setDateDeleted(null);
+                }
+
+                /**ROLE*/
+                if (rs.getString("role").equals(Role.ADMIN.getRoleName()))
+                    userEntity.setRole(Role.ADMIN);
+                else
+                    userEntity.setRole(Role.USER);
+
+                /**STATUS*/
+                if (rs.getString("status").equals(Status.ENABLE.getStatusName()))
+                    userEntity.setStatus(Status.ENABLE);
+                else if (rs.getString("status").equals(Status.DISABLE.getStatusName()))
+                    userEntity.setStatus(Status.DISABLE);
+                else
+                    userEntity.setStatus(Status.SUSPENDED);
+
+                return userEntity;
+
+            }, username);
+
+            return Optional.of(user);
+
+        }catch (EmptyResultDataAccessException e){
+            System.out.println(e.getMessage());
+            return null;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+    }
+
+
+
 }
