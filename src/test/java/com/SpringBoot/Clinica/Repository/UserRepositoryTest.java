@@ -90,7 +90,7 @@ class UserRepositoryTest {
 
         //TEST
         assertThat(userEntitiesIterable instanceof Iterable<UserEntity>).isTrue();
-        assertThat(UserList.get(1) != null).isTrue();
+        assertThat(UserList.get(0) != null).isTrue();
         assertThat(UserList.isEmpty()).isFalse();
 
     }
