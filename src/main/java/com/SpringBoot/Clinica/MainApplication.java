@@ -36,7 +36,7 @@ public class MainApplication implements CommandLineRunner {
 		UserRepository userRepository = this.context.getBean(UserRepository.class);
 
 
-		System.out.println(userRepository.findByUsername("Hola mundo"));
+		System.out.println(userRepository.findByUsername("Hola mundpo"));
 
 	}
 }
