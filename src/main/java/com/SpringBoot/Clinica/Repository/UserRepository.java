@@ -191,12 +191,10 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
 
     @Override
     public void deleteById(Integer integer) {
-        try {
-            this.jdbcTemplate.update(DELETE, integer);
-            LOGGER.trace("Info : UserRepository class : deleteById : "+LocalDateTime.now().toString() +" : ",integer);
-        }catch (IllegalFormatException e){
-            LOGGER.error("Error : UserRepository class : deleteById : "+LocalDateTime.now().toString());
-        }
+
+        this.jdbcTemplate.update(DELETE, integer);
+        LOGGER.trace("Info : UserRepository class : deleteById : "+LocalDateTime.now().toString() +" : ",integer);
+
     }
 
     @Override

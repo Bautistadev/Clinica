@@ -17,6 +17,8 @@ public class UserMapperImplements implements UserMapper{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserMapperImplements.class);
 
+    public UserMapperImplements() {
+    }
 
     @Override
     public UserEntity map(UserDTO userDTO) throws Exception {
