@@ -14,13 +14,13 @@ import javax.sql.DataSource;
 public class DataSourceConfiguration {
 
 
-    @Value("${spring.datasource.url}")
+    @Value("${spring.db.url}")
     private String url;
-    @Value("${spring.datasource.username}")
+    @Value("${spring.db.username}")
     private String username;
-    @Value("${spring.datasource.password}")
+    @Value("${spring.db.password}")
     private String password;
-    @Value("${spring.datasource.driver-class-name}")
+    @Value("${spring.db.driver-class-name}")
     private String driver;
 
     /**

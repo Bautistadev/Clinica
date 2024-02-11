@@ -2,7 +2,7 @@ package com.SpringBoot.Clinica.Entity.Enum;
 
 public enum Role {
 
-    ADMIN("ADMIN"),USER("ADMIN");
+    ADMIN("ADMIN"),USER("USER");
 
     private String roleName;
 
