@@ -1,5 +1,7 @@
 package com.SpringBoot.Clinica.Configuration;
 
+import com.SpringBoot.Clinica.Jwt.Filter.JwtAuthenticationFilter;
+import com.SpringBoot.Clinica.Jwt.Filter.JwtAuthorizationFilter;
 import com.SpringBoot.Clinica.Jwt.JWTUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
 import java.security.Security;
@@ -20,7 +23,7 @@ import java.security.Security;
 public class SpringSecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http,JwtAuthorizationFilter jwtAuthorizationFilter) throws Exception {
 
         http.csrf().disable()
                 .authorizeHttpRequests(auth -> {
@@ -29,7 +32,9 @@ public class SpringSecurityConfiguration {
                 })
                 .sessionManagement(session -> {
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                });
+
+                })
+                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
 
         return http.build();
@@ -55,5 +60,26 @@ public class SpringSecurityConfiguration {
     @Bean
     public JWTUtils jwtUtils(){
         return  new JWTUtils();
+    }
+
+
+    /**
+     * Authentication filter
+     * */
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(UserDetailsService userDetailsService,JWTUtils jwtUtils,AuthenticationManager auth){
+        JwtAuthenticationFilter jwtAuthentication = new JwtAuthenticationFilter(userDetailsService, jwtUtils);
+        jwtAuthentication.setAuthenticationManager(auth);
+        return jwtAuthentication;
+    }
+
+    /**
+     *
+     * Authorization filter
+     * */
+    @Bean
+    public JwtAuthorizationFilter jwtAuthorizationFilter(JwtAuthenticationFilter jwtAuthenticationFilter,JWTUtils jwtUtils,UserDetailsService userDetailsService){
+
+        return  new JwtAuthorizationFilter(jwtAuthenticationFilter,jwtUtils,userDetailsService);
     }
 }
