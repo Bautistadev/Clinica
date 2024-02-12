@@ -4,11 +4,14 @@ import com.SpringBoot.Clinica.Entity.UserEntity;
 import com.SpringBoot.Clinica.Repository.UserRepository;
 import com.SpringBoot.Clinica.Service.Mapper.UserMapper;
 import com.SpringBoot.Clinica.Service.Mapper.UserMapperImplements;
+import com.SpringBoot.Clinica.Service.UserDetailsServiceImplements;
 import com.SpringBoot.Clinica.Service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -27,5 +30,10 @@ public class BeanConfiguration {
     @Bean
     public UserService userService(UserRepository userRepository){
         return new UserService(userRepository, userMapper());
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(UserService userService){
+        return new UserDetailsServiceImplements(userService);
     }
 }

@@ -1,5 +1,6 @@
 package com.SpringBoot.Clinica.Configuration;
 
+import com.SpringBoot.Clinica.Jwt.JWTUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,5 +49,11 @@ public class SpringSecurityConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+
+    @Bean
+    public JWTUtils jwtUtils(){
+        return  new JWTUtils();
     }
 }
