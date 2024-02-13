@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +21,7 @@ import java.security.Security;
 
 
 @Configuration
+@EnableWebSecurity
 public class SpringSecurityConfiguration {
 
     @Bean
@@ -29,6 +31,7 @@ public class SpringSecurityConfiguration {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/swagger-ui/**","/v3/api-docs").permitAll();
                     auth.requestMatchers("/api/v1/login/login","/api/v1/login/refresh").permitAll();
+                    auth.requestMatchers("/api/v1/users/findAll").hasAnyAuthority("ADMIN");
                     auth.requestMatchers("/test").hasAnyAuthority("ADMIN");
                     auth.anyRequest().authenticated();
                 })

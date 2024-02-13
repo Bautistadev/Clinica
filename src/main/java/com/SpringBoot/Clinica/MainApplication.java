@@ -47,9 +47,6 @@ public class MainApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		PasswordEncoder userService = this.context.getBean(PasswordEncoder.class);
-
-		System.out.println(userService.encode("user 1"));
 
 	}
 	@PreDestroy

@@ -2,6 +2,7 @@ package com.SpringBoot.Clinica.Configuration;
 
 import com.SpringBoot.Clinica.Controller.ControllerTest;
 import com.SpringBoot.Clinica.Controller.LoginController;
+import com.SpringBoot.Clinica.Controller.UserController;
 import com.SpringBoot.Clinica.Entity.UserEntity;
 import com.SpringBoot.Clinica.Jwt.JWTUtils;
 import com.SpringBoot.Clinica.Repository.UserRepository;
@@ -11,6 +12,7 @@ import com.SpringBoot.Clinica.Service.UserAuthenticateService;
 import com.SpringBoot.Clinica.Service.UserDetailsServiceImplements;
 import com.SpringBoot.Clinica.Service.UserService;
 import com.SpringBoot.Clinica.api.LoginApiDelegate;
+import com.SpringBoot.Clinica.api.UsersApiDelegate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.repository.CrudRepository;
@@ -55,5 +57,10 @@ public class BeanConfiguration {
     @Bean
     public ControllerTest controllerTest(){
         return new ControllerTest();
+    }
+
+    @Bean
+    public UsersApiDelegate userController(UserService userService){
+        return new UserController(userService);
     }
 }

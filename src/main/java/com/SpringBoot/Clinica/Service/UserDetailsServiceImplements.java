@@ -39,7 +39,7 @@ public class UserDetailsServiceImplements implements UserDetailsService {
 
         UserDTO userRequest = this.userService.findByUsername(username);
 
-        System.out.println("DB REQUEST: "+userRequest);
+
 
         if(userRequest != null) {
             Collection<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
