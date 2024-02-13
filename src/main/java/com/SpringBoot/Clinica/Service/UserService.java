@@ -152,7 +152,7 @@ public class UserService {
         return true;
     }
 
-    @Cacheable(value = "users", key = "'findByUsername'")
+    @CacheEvict("users")
     public UserDTO findByUsername(String username){
        UserEntity user = this.userRepository.findByUsername(username).get();
 

@@ -19,6 +19,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PreDestroy;
 import java.time.LocalDate;
@@ -46,11 +47,9 @@ public class MainApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		UserService userService = this.context.getBean(UserService.class);
+		PasswordEncoder userService = this.context.getBean(PasswordEncoder.class);
 
-		System.out.println(userService.findById(67));
-
-
+		System.out.println(userService.encode("user 1"));
 
 	}
 	@PreDestroy
