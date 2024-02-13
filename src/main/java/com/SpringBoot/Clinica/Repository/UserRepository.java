@@ -5,6 +5,7 @@ import com.SpringBoot.Clinica.Entity.Enum.Role;
 import com.SpringBoot.Clinica.Entity.Enum.Status;
 import com.SpringBoot.Clinica.Entity.UserEntity;
 
+import com.SpringBoot.Clinica.model.UserDTO;
 import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,8 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
     private String DELETE;
     @Value("${spring.db.user.countUser}")
     private String COUNT_USERS;
-
+    @Value("${spring.db.user.update}")
+    private String UPDATE;
     public UserRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
 
@@ -285,5 +287,23 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
     }
 
 
+    public < T extends UserEntity >T update(T entity) {
+        if(entity!= null) {
+            this.jdbcTemplate.update(UPDATE,
+                    entity.getUsername(),
+                    entity.getPassword(),
+                    entity.getRole().getRoleName(),
+                    entity.getStatus().getStatusName(),
+                    entity.getId()
 
+            );
+            LOGGER.trace(String.format("Info : UserRepository : save : " + LocalDateTime.now().toString() + " : ", entity));
+        }else{
+            LOGGER.error("Error : UserRepository class : save :"+ LocalDateTime.now().toString());
+            throw new NullPointerException("Null entity : save function : UserRepository");
+        }
+
+        return entity;
+
+    }
 }

@@ -86,11 +86,12 @@ public class UserService {
         return response;
     }
 
+    @CacheEvict(cacheNames = "users",allEntries = true)
     public UserDTO update(UserDTO userDTO){
         UserEntity userUpdate = null;
         try {
             userUpdate = this.userMapper.map(userDTO);
-            this.userRepository.save(userUpdate);
+            this.userRepository.update(userUpdate);
             LOGGER.trace(String.format("Info : UserService : save : "+LocalDateTime.now()) + " : ",userUpdate);
             return userDTO;
         }catch (Exception e){
@@ -125,7 +126,7 @@ public class UserService {
         return this.userRepository.count();
     }
 
-    @CachePut("users")
+    @CacheEvict(value = "users", allEntries = true)
     public Boolean deleteById(Integer id){
 
         try{
@@ -143,7 +144,7 @@ public class UserService {
 
     }
 
-    @CachePut("users")
+    @CacheEvict(value = "users", allEntries = true)
     public boolean detele(UserDTO userDTO){
         try {
             UserEntity user = this.userMapper.map(userDTO);
@@ -156,21 +157,21 @@ public class UserService {
         }
     }
 
-    @CachePut("users")
+    @CacheEvict(value = "users", allEntries = true)
     public boolean deleteAllById(List<Integer> list ){
         this.userRepository.deleteAllById(list);
         LOGGER.trace("Info : UserRepository class : deleteAllById : "+LocalDateTime.now());
         return true;
     }
 
-    @CachePut("users")
+    @CacheEvict(value = "users", allEntries = true)
     public boolean deleteAll(List<UserEntity> list){
         this.userRepository.deleteAll(list);
         LOGGER.trace("Info : UserRepository class : deleteAll : "+LocalDateTime.now());
         return true;
     }
 
-    @CacheEvict("users")
+    @Cacheable("users")
     public UserDTO findByUsername(String username){
        UserEntity user = this.userRepository.findByUsername(username).get();
 

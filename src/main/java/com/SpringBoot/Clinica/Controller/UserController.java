@@ -41,13 +41,13 @@ public class UserController implements UsersApiDelegate {
             UserDTO response = this.userService.save(userRequestDTO);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (HttpClientErrorException.Unauthorized e){
-            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
         }catch (HttpClientErrorException.BadRequest e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }catch (HttpClientErrorException.Forbidden e){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }catch (HttpClientErrorException.NotFound e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -56,7 +56,21 @@ public class UserController implements UsersApiDelegate {
 
     @Override
     public ResponseEntity<Void> removeUser(Integer userId) {
-        return UsersApiDelegate.super.removeUser(userId);
+
+        try {
+            this.userService.deleteById(userId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (HttpClientErrorException.Unauthorized e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
+        }catch (HttpClientErrorException.BadRequest e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }catch (HttpClientErrorException.Forbidden e){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }catch (HttpClientErrorException.NotFound e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -71,13 +85,13 @@ public class UserController implements UsersApiDelegate {
             UserListDTO userListDTO = new UserListDTO().items(this.userService.findAll());
             return ResponseEntity.ok().body(userListDTO);
         }catch (HttpClientErrorException.Unauthorized e){
-            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
         }catch (HttpClientErrorException.BadRequest e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }catch (HttpClientErrorException.Forbidden e){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }catch (HttpClientErrorException.NotFound e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
     }
@@ -92,13 +106,13 @@ public class UserController implements UsersApiDelegate {
         try {
             return ResponseEntity.ok().body(this.userService.findById(userId));
         }catch (HttpClientErrorException.Unauthorized e){
-            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
         }catch (HttpClientErrorException.BadRequest e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }catch (HttpClientErrorException.Forbidden e){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }catch (HttpClientErrorException.NotFound e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -107,13 +121,13 @@ public class UserController implements UsersApiDelegate {
         try {
             return ResponseEntity.ok().body(this.userService.update(userDTO));
         }catch (HttpClientErrorException.Unauthorized e){
-            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
         }catch (HttpClientErrorException.BadRequest e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }catch (HttpClientErrorException.Forbidden e){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }catch (HttpClientErrorException.NotFound e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }
