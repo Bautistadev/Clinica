@@ -31,7 +31,7 @@ public class SpringSecurityConfiguration {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/swagger-ui/**","/v3/api-docs").permitAll();
                     auth.requestMatchers("/api/v1/login/login","/api/v1/login/refresh").permitAll();
-                    auth.requestMatchers("/api/v1/users/findAll").hasAnyAuthority("ADMIN");
+                    auth.requestMatchers("/api/v1/users/**").hasAnyAuthority("ADMIN");
                     auth.requestMatchers("/test").hasAnyAuthority("ADMIN");
                     auth.anyRequest().authenticated();
                 })

@@ -15,15 +15,11 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 
 import org.springframework.stereotype.Service;
-
-
-import javax.swing.text.html.parser.Entity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.IllegalFormatException;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
+
 
 @Service
 public class UserService {
@@ -72,7 +68,7 @@ public class UserService {
      * @param: UserRequestDTO
      * @return: UserDTO
      * */
-    @CacheEvict(value = "users",allEntries = true)
+    @CacheEvict(cacheNames = "users",allEntries = true)
     public UserDTO save(UserRequestDTO userRequestDTO) throws Exception {
         UserEntity userSave = null;
         UserDTO response;

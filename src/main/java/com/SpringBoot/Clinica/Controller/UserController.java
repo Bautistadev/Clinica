@@ -37,7 +37,21 @@ public class UserController implements UsersApiDelegate {
 
     @Override
     public ResponseEntity<UserDTO> createUser(UserRequestDTO userRequestDTO) {
-        return UsersApiDelegate.super.createUser(userRequestDTO);
+        try {
+            UserDTO response = this.userService.save(userRequestDTO);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (HttpClientErrorException.Unauthorized e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
+        }catch (HttpClientErrorException.BadRequest e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }catch (HttpClientErrorException.Forbidden e){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }catch (HttpClientErrorException.NotFound e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override

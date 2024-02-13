@@ -9,6 +9,7 @@ import com.SpringBoot.Clinica.model.UserRequestDTO;
 import org.apache.el.parser.BooleanNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,9 @@ import java.time.LocalDateTime;
 public class UserMapperImplements implements UserMapper{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserMapperImplements.class);
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public UserMapperImplements() {
     }
@@ -72,7 +76,7 @@ public class UserMapperImplements implements UserMapper{
             UserEntity user = UserEntity
                     .builder()
                     .username(userDTO.getUsername())
-                    .password(userDTO.getPassword())
+                    .password(passwordEncoder.encode(userDTO.getPassword()))
                     .dateCreated(userDTO.getDateCreated())
                     .build();
 
