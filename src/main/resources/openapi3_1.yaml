@@ -974,7 +974,7 @@ paths:
                                 type: object
                                 $ref: '#/components/schemas/InternalErrorDTO'
 
-    /users/userUpdate/{userId}:
+    /users/userUpdate:
         put:
             tags: 
                 - User
@@ -983,16 +983,8 @@ paths:
             summary: Actualizar usuario
             description: Modificacion de usuarios
             operationId: updateUser
-            parameters:
-                - name: userId
-                  in: path
-                  description: ID de usuario
-                  required: true
-                  schema:
-                    type: integer
-                    format: int32
             requestBody:
-                description: Paraemtro del body
+                description: Parametro del body
                 content:
                     application/json:
                         schema:
