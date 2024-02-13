@@ -23,18 +23,23 @@ import java.security.Security;
 public class SpringSecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http,JwtAuthorizationFilter jwtAuthorizationFilter) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http,JwtAuthorizationFilter jwtAuthorizationFilter,JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
 
         http.csrf().disable()
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/swagger-ui/**","/v3/api-docs").permitAll();
+                    auth.requestMatchers("/api/v1/login/login","/api/v1/login/refresh").permitAll();
+                    auth.requestMatchers("/test").hasAnyAuthority("ADMIN");
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> {
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
                 })
+                .addFilter(jwtAuthenticationFilter)
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+
+
 
 
         return http.build();

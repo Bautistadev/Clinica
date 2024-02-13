@@ -1,11 +1,16 @@
 package com.SpringBoot.Clinica.Configuration;
 
+import com.SpringBoot.Clinica.Controller.ControllerTest;
+import com.SpringBoot.Clinica.Controller.LoginController;
 import com.SpringBoot.Clinica.Entity.UserEntity;
+import com.SpringBoot.Clinica.Jwt.JWTUtils;
 import com.SpringBoot.Clinica.Repository.UserRepository;
 import com.SpringBoot.Clinica.Service.Mapper.UserMapper;
 import com.SpringBoot.Clinica.Service.Mapper.UserMapperImplements;
+import com.SpringBoot.Clinica.Service.UserAuthenticateService;
 import com.SpringBoot.Clinica.Service.UserDetailsServiceImplements;
 import com.SpringBoot.Clinica.Service.UserService;
+import com.SpringBoot.Clinica.api.LoginApiDelegate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.repository.CrudRepository;
@@ -35,5 +40,20 @@ public class BeanConfiguration {
     @Bean
     public UserDetailsService userDetailsService(UserService userService){
         return new UserDetailsServiceImplements(userService);
+    }
+
+    @Bean
+    public UserAuthenticateService userAuthenticateService(UserDetailsService userDetailsService, JWTUtils jwtUtils,PasswordEncoder passwordEncoder){
+        return new UserAuthenticateService(userDetailsService,jwtUtils,passwordEncoder);
+    }
+
+    @Bean
+    public LoginApiDelegate loginController(UserAuthenticateService userAuthenticateService){
+        return new LoginController(userAuthenticateService);
+    }
+
+    @Bean
+    public ControllerTest controllerTest(){
+        return new ControllerTest();
     }
 }
