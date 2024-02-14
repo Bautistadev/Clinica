@@ -30,13 +30,13 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public UserMapper userMapper(){
-        return new UserMapperImplements();
+    public UserMapper userMapper(PasswordEncoder passwordEncoder){
+        return new UserMapperImplements(passwordEncoder);
     }
 
     @Bean
-    public UserService userService(UserRepository userRepository){
-        return new UserService(userRepository, userMapper());
+    public UserService userService(UserRepository userRepository,UserMapper userMapper){
+        return new UserService(userRepository, userMapper);
     }
 
     @Bean

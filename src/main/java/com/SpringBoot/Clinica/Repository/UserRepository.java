@@ -38,8 +38,10 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
     private String SELECT_BY_ID;
     @Value("${spring.db.user.findByUsername}")
     private String SELECT_BY_USERNAME;
-    @Value("${spring.db.user.delete}")
-    private String DELETE;
+    @Value("${spring.db.user.deleteById}")
+    private String DELETE_ID;
+    @Value("${spring.db.user.deleteByUsername}")
+    private String DELETE_USERNAME;
     @Value("${spring.db.user.countUser}")
     private String COUNT_USERS;
     @Value("${spring.db.user.update}")
@@ -194,7 +196,7 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
     @Override
     public void deleteById(Integer integer) {
 
-        this.jdbcTemplate.update(DELETE, integer);
+        this.jdbcTemplate.update(DELETE_ID, integer);
         LOGGER.trace("Info : UserRepository class : deleteById : "+LocalDateTime.now().toString() +" : ",integer);
 
     }
@@ -202,7 +204,7 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
     @Override
     public void delete(UserEntity entity) {
         try {
-            this.jdbcTemplate.update(DELETE, entity.getId());
+            this.jdbcTemplate.update(DELETE_USERNAME, entity.getUsername());
             LOGGER.trace("Info : UserRepository class : delete : "+LocalDateTime.now().toString() +" : ",entity);
         }catch (Exception e){
             LOGGER.error("Error : UserRepository class : delete : "+LocalDateTime.now().toString());
@@ -215,7 +217,7 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
 
         while (iterator.hasNext()) {
             UserEntity user = (UserEntity) iterator.next();
-            this.jdbcTemplate.update(DELETE, user);
+            this.jdbcTemplate.update(DELETE_ID, user);
             LOGGER.trace("Info : UserRepository class : deleteAllById : "+LocalDateTime.now().toString() +" : ",user);
         }
     }
@@ -227,7 +229,7 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
         while (iterator.hasNext()) {
             UserEntity user = (UserEntity) iterator.next();
             LOGGER.trace("Info : UserRepository class : deleteAll : "+LocalDateTime.now().toString() +" : ",user);
-            this.jdbcTemplate.update(DELETE, user.getId());
+            this.jdbcTemplate.update(DELETE_ID, user.getId());
         }
     }
 

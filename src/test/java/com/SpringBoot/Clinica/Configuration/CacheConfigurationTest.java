@@ -1,5 +1,6 @@
 package com.SpringBoot.Clinica.Configuration;
 
+import com.SpringBoot.Clinica.Service.Mapper.UserMapper;
 import com.SpringBoot.Clinica.Service.UserService;
 import com.SpringBoot.Clinica.model.UserDTO;
 import com.SpringBoot.Clinica.model.UserRequestDTO;
@@ -22,6 +23,8 @@ class CacheConfigurationTest {
     @Autowired
     private UserService userService;
 
+
+
     @Test
     void cacheManager() throws Exception {
 
@@ -41,15 +44,20 @@ class CacheConfigurationTest {
         /**
          * The cache is clear, when a new user is created
          * */
-        this.userService.save(new UserRequestDTO()
+
+        UserRequestDTO userSave = new UserRequestDTO()
                 .username("userTest")
                 .password("userTest")
                 .role(UserRequestDTO.RoleEnum.USER)
                 .status(UserRequestDTO.StatusEnum.ENABLE)
-                .dateCreated(LocalDate.now()));
+                .dateCreated(LocalDate.now());
+
+        UserDTO response = this.userService.save(userSave);
 
 
         assertTrue(cache.isEmpty());
+
+        this.userService.delete(response);
 
     }
 }

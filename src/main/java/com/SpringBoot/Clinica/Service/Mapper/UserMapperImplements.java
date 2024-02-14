@@ -18,10 +18,11 @@ public class UserMapperImplements implements UserMapper{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserMapperImplements.class);
 
-    @Autowired
+
     private PasswordEncoder passwordEncoder;
 
-    public UserMapperImplements() {
+    public UserMapperImplements(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override

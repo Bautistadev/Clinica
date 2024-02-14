@@ -130,4 +130,20 @@ public class UserController implements UsersApiDelegate {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    @Override
+    public ResponseEntity<Void> removeUserByUsername(UserDTO userDTO) {
+        try {
+            this.userService.delete(userDTO);
+            return ResponseEntity.ok().build();
+        }catch (HttpClientErrorException.Unauthorized e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
+        }catch (HttpClientErrorException.BadRequest e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }catch (HttpClientErrorException.Forbidden e){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }catch (HttpClientErrorException.NotFound e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }

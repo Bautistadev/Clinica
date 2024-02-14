@@ -145,7 +145,7 @@ public class UserService {
     }
 
     @CacheEvict(value = "users", allEntries = true)
-    public boolean detele(UserDTO userDTO){
+    public boolean delete(UserDTO userDTO){
         try {
             UserEntity user = this.userMapper.map(userDTO);
             this.userRepository.delete(user);

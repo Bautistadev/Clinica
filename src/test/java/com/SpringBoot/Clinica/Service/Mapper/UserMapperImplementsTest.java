@@ -5,9 +5,14 @@ import com.SpringBoot.Clinica.Entity.Enum.Status;
 import com.SpringBoot.Clinica.Entity.UserEntity;
 import com.SpringBoot.Clinica.model.UserDTO;
 import com.SpringBoot.Clinica.model.UserRequestDTO;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
@@ -15,11 +20,15 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-
+@SpringBootTest
 class UserMapperImplementsTest {
 
     @Autowired
     public UserMapper userMapper;
+
+    @Autowired
+    public PasswordEncoder passwordEncoder;
+
 
 
     /**
@@ -30,7 +39,7 @@ class UserMapperImplementsTest {
     @Test
     void map() throws Exception {
 
-        userMapper = new UserMapperImplements();
+        userMapper = new UserMapperImplements(passwordEncoder);
 
         UserDTO userDTO = new UserDTO()
                 .id(1)
@@ -58,7 +67,7 @@ class UserMapperImplementsTest {
     @Test
     void testMap() throws Exception {
 
-        userMapper = new UserMapperImplements();
+        userMapper = new UserMapperImplements(passwordEncoder);
 
         UserRequestDTO userDTO = new UserRequestDTO()
                 .username("user0")
@@ -83,7 +92,7 @@ class UserMapperImplementsTest {
      * */
     @Test
     void testMap1() throws Exception {
-        userMapper = new UserMapperImplements();
+        userMapper = new UserMapperImplements(passwordEncoder);
 
         UserEntity userEntity = UserEntity.builder()
                 .username("user0")

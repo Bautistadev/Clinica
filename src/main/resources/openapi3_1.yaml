@@ -298,8 +298,9 @@ components:
                     type: array
                     $ref: '#/components/schemas/CredentialDTO'
                 telephones:
-                    type: object
-                    $ref: '#/components/schemas/TelephoneDTO'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/TelephoneDTO'
                 email:
                     type: string
                     format: email
@@ -341,8 +342,9 @@ components:
                     type: array
                     $ref: '#/components/schemas/CredentialDTO'
                 telephones:
-                    type: object
-                    $ref: '#/components/schemas/TelephoneDTO'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/TelephoneDTO'
                 email:
                     type: string
                     format: email
@@ -707,6 +709,9 @@ components:
                 refreshToken:
                     type: string
                     description: Token de refresco
+                state:
+                    type: string
+                    description: Estado
         
         EmptyResponseDTO:
             type: object
@@ -1078,6 +1083,61 @@ paths:
                             schema:
                                 type: object
                                 $ref: '#/components/schemas/InternalErrorDTO'
+
+    /users/removeUser/removeByUsername:
+        delete:
+            tags:
+                - User
+            security:
+                - bearerAuth: [ ]
+            summary: Remueve un usuario
+            description: Elimina un usuario del sistema
+            operationId: removeUserByUsername
+            requestBody:
+                description: Parametros de uso
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserDTO'
+
+            responses:
+                200:
+                    description: Si la peticion es correcta
+                    content:
+                        application/json:
+                            schema:
+                                message:
+                                    type: string
+                                    format: text
+                                    default: Usuario Eliminado
+                400:
+                    description: Si el endpoint no existe
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                404:
+                    description: "Si la peticon falla"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/NotFoundMessageDTO'
+                401:
+                    description: "Si el usuario no tiene autorizacion"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/UnAuthorizeRequestDTO'
+                500:
+                    description: "Error intreno del servidor"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: '#/components/schemas/InternalErrorDTO'
+
     /login/login:
         post:
             tags:
