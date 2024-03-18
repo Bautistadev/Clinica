@@ -13,7 +13,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-class CredentialEntity {
+public class CredentialEntity {
 
     private Integer id;
     private String name_lastname;

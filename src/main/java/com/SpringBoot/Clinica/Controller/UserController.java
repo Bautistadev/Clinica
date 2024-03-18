@@ -75,6 +75,9 @@ public class UserController implements UsersApiDelegate {
 
     @Override
     public ResponseEntity<UserListDTO> retriveAllUser() {
+        /**
+         * VISUALIZACION DE LA CACHE
+         * */
         ConcurrentHashMap<?,?> cache = (ConcurrentHashMap<?, ?>) this.cacheManager.getCache("users").getNativeCache();
 
         cache.forEach((key,object)->{

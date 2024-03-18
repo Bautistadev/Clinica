@@ -5,6 +5,7 @@ import com.SpringBoot.Clinica.Controller.LoginController;
 import com.SpringBoot.Clinica.Controller.UserController;
 import com.SpringBoot.Clinica.Entity.UserEntity;
 import com.SpringBoot.Clinica.Jwt.JWTUtils;
+import com.SpringBoot.Clinica.Repository.CredentialRepository;
 import com.SpringBoot.Clinica.Repository.UserRepository;
 import com.SpringBoot.Clinica.Service.Mapper.UserMapper;
 import com.SpringBoot.Clinica.Service.Mapper.UserMapperImplements;
@@ -62,5 +63,11 @@ public class BeanConfiguration {
     @Bean
     public UsersApiDelegate userController(UserService userService){
         return new UserController(userService);
+    }
+
+
+    @Bean
+    public CredentialRepository credentialRepository(JdbcTemplate jdbcTemplate){
+        return  new CredentialRepository(jdbcTemplate);
     }
 }

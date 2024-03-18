@@ -30,8 +30,8 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
 
     private JdbcTemplate jdbcTemplate;
 
-   // @Value("${spring.db.user.insert}")
-    private  String SAVE = "INSERT INTO User(username,password,role,status,dateCreated) VALUES(?,?,?,?,?)";
+    @Value("${spring.db.user.insert}")
+    private  String SAVE;
     @Value("${spring.db.user.findAll}")
     private String SELECT_ALL;
     @Value("${spring.db.user.findById}")

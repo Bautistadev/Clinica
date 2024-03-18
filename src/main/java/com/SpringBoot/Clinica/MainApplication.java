@@ -1,8 +1,10 @@
 package com.SpringBoot.Clinica;
 
+import com.SpringBoot.Clinica.Entity.CredentialEntity;
 import com.SpringBoot.Clinica.Entity.Enum.Role;
 import com.SpringBoot.Clinica.Entity.Enum.Status;
 import com.SpringBoot.Clinica.Entity.UserEntity;
+import com.SpringBoot.Clinica.Repository.CredentialRepository;
 import com.SpringBoot.Clinica.Repository.UserRepository;
 import com.SpringBoot.Clinica.Service.UserService;
 import com.SpringBoot.Clinica.model.UserRequestDTO;
@@ -37,8 +39,14 @@ public class MainApplication implements CommandLineRunner {
 		LOGGER.info("START SPRINBOOT SERVICE");
 		ConfigurableApplicationContext ctx = SpringApplication.run(MainApplication.class, args);
 
+		CredentialRepository r = ctx.getBean(CredentialRepository.class);
+
+
+		System.out.println(r.findById(1));
+
 
 	}
+
 
 	@Autowired
 	private ConfigurableApplicationContext context;
