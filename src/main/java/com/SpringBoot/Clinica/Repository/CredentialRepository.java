@@ -117,7 +117,7 @@ public class CredentialRepository implements CrudRepository<CredentialEntity,Int
      * */
     @Override
     public boolean existsById(Integer integer) {
-        return this.jdbcTemplate.queryForObject(COUNT_CREDENTIAL.concat("WHERE id = ?"),(rs,rowNum) -> {
+        return this.jdbcTemplate.queryForObject(COUNT_CREDENTIAL.concat(" WHERE id = ?"),(rs,rowNum) -> {
             if(rs.getInt("count") == 0){
                 LOGGER.trace("Info : CredentialRepository : existsById : "+ LocalDate.now() + " : true");
                 return false;
