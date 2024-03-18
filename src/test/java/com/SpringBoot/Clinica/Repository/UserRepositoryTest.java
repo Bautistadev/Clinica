@@ -68,12 +68,12 @@ class UserRepositoryTest {
     void existsById() {
 
         //GIVEN
-        Boolean isExits = this.userRepository.existsById(1);
-        Boolean isNotExits = this.userRepository.existsById(10000);
+        Boolean isExists = this.userRepository.existsById(1);
+        Boolean isNotExists = this.userRepository.existsById(10000);
 
         //TEST
-        assertTrue(isExits);
-        assertFalse(isNotExits);
+        assertTrue(isExists);
+        assertFalse(isNotExists);
 
     }
 

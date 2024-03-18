@@ -38,6 +38,8 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
     private String SELECT_BY_ID;
     @Value("${spring.db.user.findByUsername}")
     private String SELECT_BY_USERNAME;
+    @Value("${spring.db.user.findUserByAttribute}")
+    private String SELECT_USER_BY_ATTRIBUTE;
     @Value("${spring.db.user.deleteById}")
     private String DELETE_ID;
     @Value("${spring.db.user.deleteByUsername}")
@@ -85,6 +87,13 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
         return null;
     }
 
+    /**
+     *
+     * @info: FIND USER
+     * @param: Integer
+     * @return: UserEntity object
+     *
+     * */
     @Override
     public Optional<UserEntity> findById(Integer integer) {
         UserEntity user = this.jdbcTemplate.queryForObject(SELECT_BY_ID,(rs, rowNum)->{
@@ -124,6 +133,15 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
         return Optional.of(user);
     }
 
+
+    /**
+     *
+     * @info: exists
+     * @param: Integer
+     * @return: Boolean
+     *
+     * */
+
     @Override
     public boolean existsById(Integer integer) {
         return this.jdbcTemplate.queryForObject(COUNT_USERS.concat(" WHERE id = ? "),(rs,rowNum) -> {
@@ -136,7 +154,48 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
         },integer);
     }
 
+    /**
+     *
+     * @info: FIND USER BY ONLY ATTRIBUTE
+     * @param1: STRING ATTRIBUTE
+     * @param2: STRING VALUE
+     * @return: ITERABLE UserEntity CLASS
+     *
+     * */
+    public Iterable<UserEntity> findUserByAttribute(String attribute, String value){
+        RowMapper<UserEntity> rowMapper = (rs,rowNum)->{
+            UserEntity userEntity = UserEntity.builder()
+                    .id(rs.getInt("id"))
+                    .username(rs.getString("username"))
+                    .password(rs.getString("password"))
+                    .dateCreated(LocalDate.parse(rs.getString("dateCreated")))
+                    .build();
 
+            if(rs.getString("dateDeleted") != null){
+                userEntity.setDateDeleted(LocalDate.parse(rs.getString("dateDeleted")));
+            }else{
+                userEntity.setDateDeleted(null);
+            }
+
+            if(rs.getString("role").equals(Role.ADMIN.getRoleName()))
+                userEntity.setRole(Role.ADMIN);
+            else
+                userEntity.setRole(Role.USER);
+
+            if(rs.getString("status").equals(Status.ENABLE.getStatusName()))
+                userEntity.setStatus(Status.ENABLE);
+            else if(rs.getString("status").equals(Status.DISABLE.getStatusName()))
+                userEntity.setStatus(Status.DISABLE);
+            else
+                userEntity.setStatus(Status.SUSPENDED);
+
+            LOGGER.trace("Info : UserRepository class : findUserByAttribute : "+LocalDateTime.now().toString());
+
+            return userEntity;
+        };
+
+        return this.jdbcTemplate.query(SELECT_USER_BY_ATTRIBUTE,new Object[]{attribute,value},rowMapper);
+    }
     /**
      *
      * @info: Find all users
@@ -187,12 +246,24 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
         return null;
     }
 
+    /**
+     *
+     * @info: COUNT USERS
+     * @return: Number
+     *
+     * */
     @Override
     public long count() {
 
         return this.jdbcTemplate.queryForObject(COUNT_USERS, Long.class);
     }
 
+    /**
+     *
+     * @info: DELETE USER BY ID
+     * @param: INTEGER id
+     *
+     * */
     @Override
     public void deleteById(Integer integer) {
 
@@ -201,6 +272,12 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
 
     }
 
+    /**
+     *
+     * @info: DELETE USER BY ENTITY OBJECT
+     * @param: UserEntity
+     *
+     * */
     @Override
     public void delete(UserEntity entity) {
         try {
@@ -211,6 +288,12 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
         }
     }
 
+    /**
+     *
+     * @info: DELETE ALL USER, USING AN ID ITERABLE LIST
+     * @param: ITERABLE --> INTEGER
+     *
+     * */
     @Override
     public void deleteAllById(Iterable<? extends Integer> integers) {
         Iterator iterator = integers.iterator();
@@ -222,6 +305,12 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
         }
     }
 
+    /**
+     *
+     * @info: DELETE ALL USER, USING AN OBJECT ITERABLE LIST
+     * @param: ITERABLE --> UserEntity
+     *
+     * */
     @Override
     public void deleteAll(Iterable<? extends UserEntity> entities) {
         Iterator iterator = entities.iterator();
@@ -238,6 +327,13 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
 
     }
 
+    /**
+     *
+     * @info: FIND BY USERNAME
+     * @param: STRING USERNAME
+     * @return: UserEntity
+     *
+     * */
     public Optional<UserEntity> findByUsername(String username){
         try {
             UserEntity user = this.jdbcTemplate.queryForObject(SELECT_BY_USERNAME, (rs, rowNum) -> {
@@ -288,6 +384,12 @@ public class UserRepository implements CrudRepository<UserEntity, Integer> {
 
     }
 
+    /**
+     *
+     * @info: UPDATE ENTITY
+     * @param: UserEntity ENTITY
+     * @return: UserEntity
+     * */
 
     public < T extends UserEntity >T update(T entity) {
         if(entity!= null) {

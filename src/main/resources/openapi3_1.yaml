@@ -931,16 +931,15 @@ paths:
                   description: Tipo de atributo a buscar
                   example: nombre
                   schema:
-                    type: integer
-                    format: int32
+                    type: string
                 - name: value
                   in: path
                   description: valor necesario para la busqueda
                   example: bautista
                   required: true
                   schema:
-                    type: integer
-                    format: int32
+                    type: string
+
 
             responses:
                 200:
@@ -948,9 +947,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                oneOf:
-                                    - $ref: '#/components/schemas/UserDTO'
-                                    - $ref: '#/components/schemas/UserListDTO'
+                                $ref: '#/components/schemas/UserListDTO'
                 400:
                     description: Si el endpoint no existe
                     content:

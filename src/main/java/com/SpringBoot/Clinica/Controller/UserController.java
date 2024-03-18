@@ -2,7 +2,7 @@ package com.SpringBoot.Clinica.Controller;
 
 import com.SpringBoot.Clinica.Service.UserService;
 import com.SpringBoot.Clinica.api.UsersApiDelegate;
-import com.SpringBoot.Clinica.model.RetriveAttributeUser200Response;
+
 import com.SpringBoot.Clinica.model.UserDTO;
 import com.SpringBoot.Clinica.model.UserListDTO;
 import com.SpringBoot.Clinica.model.UserRequestDTO;
@@ -99,8 +99,9 @@ public class UserController implements UsersApiDelegate {
 
     }
 
+
     @Override
-    public ResponseEntity<RetriveAttributeUser200Response> retriveAttributeUser(Integer attribute, Integer value) {
+    public ResponseEntity<UserListDTO> retriveAttributeUser(String attribute, String value) {
         return UsersApiDelegate.super.retriveAttributeUser(attribute, value);
     }
 

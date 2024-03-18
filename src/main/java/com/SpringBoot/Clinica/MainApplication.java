@@ -42,7 +42,7 @@ public class MainApplication implements CommandLineRunner {
 		CredentialRepository r = ctx.getBean(CredentialRepository.class);
 
 
-		System.out.println(r.findById(1));
+		System.out.println(r.find_by_credential_number("11585144778").get());
 
 
 	}
