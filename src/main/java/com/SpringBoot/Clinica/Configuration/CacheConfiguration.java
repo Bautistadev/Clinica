@@ -16,7 +16,7 @@ public class CacheConfiguration {
     @Bean
     public CacheManager cacheManager(){
         ConcurrentMapCacheManager cacheManager = new ConcurrentMapCacheManager();
-        cacheManager.setCacheNames(Arrays.asList("users"));
+        cacheManager.setCacheNames(Arrays.asList("users,credentials"));
         cacheManager.setAllowNullValues(false);
 
         return cacheManager;

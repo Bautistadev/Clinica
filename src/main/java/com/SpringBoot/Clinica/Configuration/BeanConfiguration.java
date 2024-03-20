@@ -6,9 +6,10 @@ import com.SpringBoot.Clinica.Controller.UserController;
 import com.SpringBoot.Clinica.Entity.UserEntity;
 import com.SpringBoot.Clinica.Jwt.JWTUtils;
 import com.SpringBoot.Clinica.Repository.CredentialRepository;
+import com.SpringBoot.Clinica.Repository.DoctorRepository;
 import com.SpringBoot.Clinica.Repository.UserRepository;
-import com.SpringBoot.Clinica.Service.Mapper.UserMapper;
-import com.SpringBoot.Clinica.Service.Mapper.UserMapperImplements;
+import com.SpringBoot.Clinica.Service.CredentialService;
+import com.SpringBoot.Clinica.Service.Mapper.*;
 import com.SpringBoot.Clinica.Service.UserAuthenticateService;
 import com.SpringBoot.Clinica.Service.UserDetailsServiceImplements;
 import com.SpringBoot.Clinica.Service.UserService;
@@ -69,5 +70,24 @@ public class BeanConfiguration {
     @Bean
     public CredentialRepository credentialRepository(JdbcTemplate jdbcTemplate){
         return  new CredentialRepository(jdbcTemplate);
+    }
+    @Bean
+    public CredentialMapper credentialMapper(){
+        return new CredentialMapperImplements();
+    }
+
+    @Bean
+    public CredentialService credentialService(CredentialRepository credentialRepository, CredentialMapper credentialMapper){
+        return new CredentialService(credentialRepository,credentialMapper);
+    }
+
+    @Bean
+    public DoctorRepository doctorRepository(JdbcTemplate jdbcTemplate){
+        return new DoctorRepository(jdbcTemplate);
+    }
+
+    @Bean
+    public DoctorMapper doctorMapper(CredentialMapper credentialMapper,UserMapper userMapper){
+        return new DoctorMapperImplements(credentialMapper,userMapper);
     }
 }

@@ -38,6 +38,7 @@ public class UserService {
     }
 
     /**
+     * @operation: retrieve all
      * @Return: UserDTO List
      * */
     @Cacheable(cacheNames = "users", key = "'findAll'")
@@ -65,6 +66,7 @@ public class UserService {
     }
 
     /**
+     * @operation: save
      * @param: UserRequestDTO
      * @return: UserDTO
      * */
@@ -86,6 +88,11 @@ public class UserService {
         return response;
     }
 
+    /**
+     * @operation: update user
+     * @param: UserDTO
+     * @return: UserDTO
+     * */
     @CacheEvict(cacheNames = "users",allEntries = true)
     public UserDTO update(UserDTO userDTO){
         UserEntity userUpdate = null;
@@ -99,7 +106,11 @@ public class UserService {
             throw new RuntimeException(e);
         }
     }
-
+    /**
+     * @operation: find user by id
+     * @param: Integer
+     * @return: UserDTO
+     * */
     @Cacheable(cacheNames = "users")
     public UserDTO findById(Integer id){
         try {
@@ -113,19 +124,32 @@ public class UserService {
             throw new RuntimeException(e);
         }
     }
+    /**
+     * @operation: exists user by id
+     * @param: Integer
+     * @return: Boolean
+     * */
 
-    @CacheEvict("users")
     public boolean existsById(Integer id){
         LOGGER.trace("Info : UserService : existsById : "+LocalDateTime.now()+" : ",id);
         return this.userRepository.existsById(id);
     }
 
-    @CacheEvict("users")
+    /**
+     * @operation: count users
+     * @return: Number
+     * */
+
     public long count(){
         LOGGER.trace("Info : UserService : existsById : "+LocalDateTime.now());
         return this.userRepository.count();
     }
 
+    /**
+     * @operation: delete by id
+     * @param: Integer
+     * @return: Boolean
+     * */
     @CacheEvict(value = "users", allEntries = true)
     public Boolean deleteById(Integer id){
 
@@ -144,6 +168,11 @@ public class UserService {
 
     }
 
+    /**
+     * @operation: delete by id
+     * @param: UserDTO
+     * @return: Boolean
+     * */
     @CacheEvict(value = "users", allEntries = true)
     public boolean delete(UserDTO userDTO){
         try {
@@ -157,6 +186,11 @@ public class UserService {
         }
     }
 
+    /**
+     * @operation: delete all users by id list
+     * @param: Integer List
+     * @return: Boolean
+     * */
     @CacheEvict(value = "users", allEntries = true)
     public boolean deleteAllById(List<Integer> list ){
         this.userRepository.deleteAllById(list);
@@ -164,6 +198,11 @@ public class UserService {
         return true;
     }
 
+    /**
+     * @operation: delete all users by userEntity object list
+     * @param: UserEntity object List
+     * @return: Boolean
+     * */
     @CacheEvict(value = "users", allEntries = true)
     public boolean deleteAll(List<UserEntity> list){
         this.userRepository.deleteAll(list);
@@ -171,6 +210,11 @@ public class UserService {
         return true;
     }
 
+    /**
+     * @operation: find by username
+     * @param: String username
+     * @return: UserDTO
+     * */
     @Cacheable("users")
     public UserDTO findByUsername(String username){
        UserEntity user = this.userRepository.findByUsername(username).get();

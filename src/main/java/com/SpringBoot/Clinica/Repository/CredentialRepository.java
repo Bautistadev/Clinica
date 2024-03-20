@@ -50,7 +50,7 @@ public class CredentialRepository implements CrudRepository<CredentialEntity,Int
 
     /**
      *
-     * @info: SAVE
+     * @info:KEY SAVE
      * @param: CredentialEntity
      * @return CredentialEntity
      *

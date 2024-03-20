@@ -10,9 +10,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -35,6 +38,15 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
     @Value("${spring.db.doctor.update}")
     private String UPDATE;
 
+    public DoctorRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    /**
+     * @operation: save
+     * @param: DoctorEntity
+     * @return: DoctorEntity
+     * */
     @Override
     public <S extends DoctorEntity> S save(S entity) {
         if(entity != null){
@@ -52,7 +64,7 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
             LOGGER.trace("Error : DoctorRepository : save : "+LocalDate.now());
             throw new NullPointerException("Error : DoctorRepository : save : "+LocalDate.now());
         }
-        return null;
+        return entity;
     }
 
     @Override
@@ -60,6 +72,11 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
         return null;
     }
 
+    /**
+     * @operation: find by id
+     * @param: Integer
+     * @return: Optional --> DoctorEntity
+     * */
     @Override
     public Optional<DoctorEntity> findById(Integer integer) {
 
@@ -94,6 +111,11 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
         return Optional.of(doctor);
     }
 
+    /**
+     * @operation: exists by id
+     * @param: Integer
+     * @return: Boolean
+     * */
     @Override
     public boolean existsById(Integer integer) {
         if(this.count() == 0)
@@ -102,6 +124,10 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
             return true;
     }
 
+    /**
+     * @operation: find all doctos
+     * @return: Iterable --> DoctorEntity
+     * */
     @Override
     public Iterable<DoctorEntity> findAll() {
 
@@ -142,22 +168,41 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
         return null;
     }
 
+    /**
+     * @operation: count all Doctors
+     * @return: Number
+     * */
     @Override
     public long count() {
 
         return this.jdbcTemplate.queryForObject(COUNT_DOCTOR,Long.class);
     }
 
+    /**
+     * @operation: delete by DoctorEntity id
+     * @param: Integer
+     * @return: -
+     * */
     @Override
     public void deleteById(Integer integer) {
         this.jdbcTemplate.update(DELETE_BY_ID,integer);
     }
 
+    /**
+     * @operation: delete by DoctorEntity object
+     * @param: DoctorEntity
+     * @return: -
+     * */
     @Override
     public void delete(DoctorEntity entity) {
         this.deleteById(entity.getId());
     }
 
+    /**
+     * @operation: delete all by id
+     * @param: Interable --> Integer
+     * @return: -
+     * */
     @Override
     public void deleteAllById(Iterable<? extends Integer> integers) {
         Iterator iterator = integers.iterator();
@@ -172,6 +217,67 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
 
     @Override
     public void deleteAll() {
+
+    }
+
+    private String getFilterQuery(String query, Map<String,String> filter){
+        String SELECT_FILTER = query.concat(" WHERE ");
+        Iterator<Map.Entry<String,String>> iterator = filter.entrySet().iterator();
+
+        iterator.forEachRemaining(entry ->{
+            String colum =  entry.getKey();
+            String value = entry.getValue();
+
+            SELECT_FILTER.concat(colum + "="+value);
+
+            if(iterator.hasNext()){
+                SELECT_FILTER.concat(" AND ");
+            }
+        });
+
+        return SELECT_FILTER;
+    }
+
+    /**
+     * @operation: Filter find
+     * @param: Map --> key=column, value=data
+     * @return: List --> UserDTO
+     * */
+    public List<DoctorEntity> filterFind(Map<String,String> filter){
+
+        RowMapper<DoctorEntity> rowMapper = (rs,rowNum)->{
+
+            DoctorEntity doctorEntity = DoctorEntity.builder()
+                    .id(rs.getInt("id"))
+                    .name(rs.getString("name"))
+                    .lastname(rs.getString("lastname"))
+                    .dni(rs.getInt("dni"))
+                    .dateCreated(LocalDate.parse(rs.getString("dateCreated")))
+                    .email(rs.getString("email"))
+                    .build();
+
+            if(rs.getString("dateDeleted") != null)
+                doctorEntity.setDateDeleted(LocalDate.parse(rs.getString("dateDeleted")));
+            else
+                doctorEntity.setDateDeleted(null);
+
+            doctorEntity.setUser(UserEntity.builder()
+                    .username(rs.getString("username"))
+                    .build());
+            doctorEntity.setCredential(CredentialEntity.builder()
+                    .id(rs.getInt("idCredential"))
+                    .especiality(rs.getString("especiality"))
+                    .licensenumber(rs.getString("licenseNumber"))
+                    .build());
+
+            LOGGER.trace("Info: DoctorRepository : findAll : "+ LocalDate.now().toString());
+            return doctorEntity;
+        };
+
+        /**
+         * PASAMOS EL FILTRO
+         * */
+        return this.jdbcTemplate.query(getFilterQuery(SELECT_ALL,filter),rowMapper);
 
     }
 }

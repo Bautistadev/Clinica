@@ -377,12 +377,13 @@ components:
             type: object
             properties:
                 id:
-                    type: string
+                    type: integer
+                    format: int32
                 name_lastname: 
                     type: string
                     description: Nombre completo del doctor
                 licenseNumber:
-                    type: integer
+                    type: string
                     format: int32
                     description: Numero de la licencia
                 especiality:
@@ -409,7 +410,7 @@ components:
                     type: string
                     description: Nombre completo del doctor
                 licenseNumber:
-                    type: integer
+                    type: string
                     format: int32
                     description: Numero de la licencia
                 especiality:
