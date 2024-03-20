@@ -41,11 +41,8 @@ public class MainApplication implements CommandLineRunner {
 		ConfigurableApplicationContext ctx = SpringApplication.run(MainApplication.class, args);
 
 		DoctorRepository r = ctx.getBean(DoctorRepository.class);
-
-
+		
 		System.out.println(r.findAll());
-
-
 	}
 
 

@@ -69,7 +69,7 @@ public class CredentialRepository implements CrudRepository<CredentialEntity,Int
             LOGGER.trace(String.format("Info: CredentialRepository : save : "+ LocalDate.now().toString() +" : ",entity));
         }else{
             LOGGER.error("Error : CredentialRepository : save : "+ LocalDate.now().toString());
-            throw new NullPointerException("Null entity : save function :  DoctorRepository");
+            throw new NullPointerException("Null entity : save function :  CredentialRepository");
         }
 
         return entity;

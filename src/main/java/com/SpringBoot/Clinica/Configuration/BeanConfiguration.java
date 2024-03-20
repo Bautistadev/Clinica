@@ -7,6 +7,7 @@ import com.SpringBoot.Clinica.Entity.UserEntity;
 import com.SpringBoot.Clinica.Jwt.JWTUtils;
 import com.SpringBoot.Clinica.Repository.CredentialRepository;
 import com.SpringBoot.Clinica.Repository.DoctorRepository;
+import com.SpringBoot.Clinica.Repository.TelephoneRepository;
 import com.SpringBoot.Clinica.Repository.UserRepository;
 import com.SpringBoot.Clinica.Service.CredentialService;
 import com.SpringBoot.Clinica.Service.Mapper.*;
@@ -89,5 +90,10 @@ public class BeanConfiguration {
     @Bean
     public DoctorMapper doctorMapper(CredentialMapper credentialMapper,UserMapper userMapper){
         return new DoctorMapperImplements(credentialMapper,userMapper);
+    }
+
+    @Bean
+    public TelephoneRepository telephoneRepository(JdbcTemplate jdbcTemplate){
+        return new TelephoneRepository(jdbcTemplate);
     }
 }
