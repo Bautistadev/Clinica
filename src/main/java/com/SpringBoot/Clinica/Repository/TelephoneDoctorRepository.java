@@ -24,9 +24,9 @@ public class TelephoneDoctorRepository {
 
     private JdbcTemplate jdbcTemplate;
 
-    @Value("${spring.db.telephone.insertRelationTelephone}")
+    @Value("${spring.db.telephone.insertRelationDoctorTelephone}")
     private String INSERT;
-    @Value("${spring.db.telephone.findByTelephoneId }")
+    @Value("${spring.db.telephone.findByDoctorTelephoneId}")
     private String FIND_BY_TELEPHONE_ID;
     @Value("${spring.db.telephone.findByDoctorId}")
     private String FIND_BY_DOCTOR_ID;
