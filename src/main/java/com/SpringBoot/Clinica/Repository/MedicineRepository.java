@@ -90,9 +90,22 @@ public class MedicineRepository implements CrudRepository<MedicineEntity,Integer
         return Optional.of(medicineEntity);
     }
 
+    /**
+     * @Operation: EXISTS BY ID
+     * @Param: Integer (id)
+     * @return: Boolean
+     * */
     @Override
     public boolean existsById(Integer integer) {
-        return false;
+        return this.jdbcTemplate.queryForObject(COUNT_MEDICINE.concat("WHERE id = ?"),(rs,column)->{
+            if(rs.getInt("COUNT") == 0){
+                LOGGER.trace("Error : MedicineRepository : existsById : "+LocalDate.now());
+                return false;
+            }else{
+                LOGGER.trace("Info : MedicineRepository : existsById : "+LocalDate.now());
+                return true;
+            }
+        },integer);
     }
 
     /**
@@ -125,20 +138,32 @@ public class MedicineRepository implements CrudRepository<MedicineEntity,Integer
         return null;
     }
 
+    /**
+     * @operation: COUNT
+     * @return: Integer
+     * */
     @Override
     public long count() {
         LOGGER.trace("Info : MedicineRepository : count : "+ LocalDate.now());
         return this.jdbcTemplate.queryForObject(COUNT_MEDICINE, Long.class);
     }
 
+    /**
+     * @Operation: DELETE BY ID
+     * @param: INTEGER (id)
+     * */
     @Override
     public void deleteById(Integer integer) {
-
+        this.jdbcTemplate.update(DELETE_BY_ID,integer);
     }
 
+    /**
+     * @Operation: DELETE BY OBJECT ENTITY
+     * @param: MEDICINE ENTITY OBJECT
+     * */
     @Override
     public void delete(MedicineEntity entity) {
-
+        this.jdbcTemplate.update(DELETE_BY_ID,entity.getId());
     }
 
     @Override
