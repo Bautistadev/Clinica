@@ -89,6 +89,9 @@ public class CredentialRepository implements CrudRepository<CredentialEntity,Int
      * */
     @Override
     public Optional<CredentialEntity> findById(Integer integer) {
+        if(integer == null)
+            throw  new NullPointerException("Error :  PatientRepository : findById : "+LocalDate.now());
+
         RowMapper<CredentialEntity> rowMapper = (rs,rowNumber)->{
             CredentialEntity credential = CredentialEntity.builder()
                     .id(rs.getInt("id"))
@@ -117,12 +120,15 @@ public class CredentialRepository implements CrudRepository<CredentialEntity,Int
      * */
     @Override
     public boolean existsById(Integer integer) {
+        if(integer == null)
+            throw  new NullPointerException("Error :  PatientRepository : findById : "+LocalDate.now());
+
         return this.jdbcTemplate.queryForObject(COUNT_CREDENTIAL.concat(" WHERE id = ?"),(rs,rowNum) -> {
             if(rs.getInt("count") == 0){
-                LOGGER.trace("Info : CredentialRepository : existsById : "+ LocalDate.now() + " : true");
+                LOGGER.trace("Info : CredentialRepository : existsById : "+ LocalDate.now() + " : false");
                 return false;
             }else{
-                LOGGER.trace("error : CredentialRepository : existsById : "+ LocalDate.now() + " : false");
+                LOGGER.trace("Info : CredentialRepository : existsById : "+ LocalDate.now() + " : true");
                 return true;
             }
         },integer);
@@ -137,6 +143,7 @@ public class CredentialRepository implements CrudRepository<CredentialEntity,Int
      * */
     @Override
     public Iterable<CredentialEntity> findAll() {
+
         RowMapper<CredentialEntity> rowMapper = (rs,rowNumber)->{
             CredentialEntity credential = CredentialEntity.builder()
                     .id(rs.getInt("id"))
@@ -179,6 +186,9 @@ public class CredentialRepository implements CrudRepository<CredentialEntity,Int
      * */
     @Override
     public void deleteById(Integer integer) {
+        if(integer == null)
+            throw  new NullPointerException("Error :  PatientRepository : findById : "+LocalDate.now());
+
         LOGGER.trace("Info : CredentialRepository : deleteById : "+ LocalDate.now()+ " : "+integer);
         this.jdbcTemplate.update(DELETE_BY_ID,integer);
     }

@@ -120,10 +120,10 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
     public boolean existsById(Integer integer) {
         return this.jdbcTemplate.queryForObject(COUNT_DOCTOR.concat(" WHERE id = ?"),(rs,column)->{
             if(rs.getInt("COUNT") == 0) {
-                LOGGER.trace("Error :  DoctorRepository : existsById : " + LocalDate.now());
+                LOGGER.trace("Info :  DoctorRepository : existsById : " + LocalDate.now()+" : FALSE");
                 return false;
             }else {
-                LOGGER.trace("Info :  DoctorRepository : existsById : " + LocalDate.now());
+                LOGGER.trace("Info :  DoctorRepository : existsById : " + LocalDate.now()+" : TRUE");
                 return true;
             }
 

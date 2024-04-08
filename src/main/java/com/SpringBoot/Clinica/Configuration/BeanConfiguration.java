@@ -27,6 +27,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class BeanConfiguration {
 
+
+    /**
+     * USER
+     * */
     @Bean
     public UserRepository userRepository(JdbcTemplate jdbcTemplate){
         return  new UserRepository(jdbcTemplate);
@@ -52,6 +56,9 @@ public class BeanConfiguration {
         return new UserAuthenticateService(userDetailsService,jwtUtils,passwordEncoder);
     }
 
+    /**
+     * LOGIN
+     * */
     @Bean
     public LoginApiDelegate loginController(UserAuthenticateService userAuthenticateService){
         return new LoginController(userAuthenticateService);
@@ -82,6 +89,9 @@ public class BeanConfiguration {
         return new CredentialService(credentialRepository,credentialMapper);
     }
 
+    /**
+     * DOCTOR
+     * */
     @Bean
     public DoctorRepository doctorRepository(JdbcTemplate jdbcTemplate){
         return new DoctorRepository(jdbcTemplate);
@@ -91,7 +101,9 @@ public class BeanConfiguration {
     public DoctorMapper doctorMapper(CredentialMapper credentialMapper,UserMapper userMapper){
         return new DoctorMapperImplements(credentialMapper,userMapper);
     }
-
+     /**
+      * TELEPHONE
+      * */
     @Bean
     public TelephoneRepository telephoneRepository(JdbcTemplate jdbcTemplate){
         return new TelephoneRepository(jdbcTemplate);
