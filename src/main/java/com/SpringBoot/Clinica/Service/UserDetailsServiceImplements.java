@@ -2,6 +2,7 @@ package com.SpringBoot.Clinica.Service;
 
 import com.SpringBoot.Clinica.model.UserDTO;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -31,15 +32,13 @@ public class UserDetailsServiceImplements implements UserDetailsService {
     private String role;
 
     @Override
+    @Cacheable(cacheManager = "only_Entity",cacheNames = "session", key = "#username")
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        System.out.println(username);
        if(username.equals(usernameTest))
             return userTest();
 
         UserDTO userRequest = this.userService.findByUsername(username);
-
-
 
         if(userRequest != null) {
             Collection<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();

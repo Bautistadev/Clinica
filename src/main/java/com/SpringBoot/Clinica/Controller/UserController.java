@@ -1,5 +1,6 @@
 package com.SpringBoot.Clinica.Controller;
 
+import com.SpringBoot.Clinica.Cache.Service.CacheUserService;
 import com.SpringBoot.Clinica.Service.UserService;
 import com.SpringBoot.Clinica.api.UsersApiDelegate;
 
@@ -10,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.NativeWebRequest;
 
@@ -24,9 +23,13 @@ public class UserController implements UsersApiDelegate {
     @Autowired
     private CacheManager cacheManager;
 
+    @Autowired
+    private CacheUserService cacheService;
+
     private UserService userService;
 
     public UserController(UserService userService) {
+
         this.userService = userService;
     }
 
@@ -81,8 +84,10 @@ public class UserController implements UsersApiDelegate {
         ConcurrentHashMap<?,?> cache = (ConcurrentHashMap<?, ?>) this.cacheManager.getCache("users").getNativeCache();
 
         cache.forEach((key,object)->{
-            System.out.println(key + " --- "+ object);
+            System.out.println("key: "+key + " --- "+ object);
         });
+
+
 
         try {
             UserListDTO userListDTO = new UserListDTO().items(this.userService.findAll());
@@ -107,6 +112,7 @@ public class UserController implements UsersApiDelegate {
 
     @Override
     public ResponseEntity<UserDTO> retriveUser(Integer userId) {
+
         try {
             return ResponseEntity.ok().body(this.userService.findById(userId));
         }catch (HttpClientErrorException.Unauthorized e){

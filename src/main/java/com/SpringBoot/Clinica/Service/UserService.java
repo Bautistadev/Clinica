@@ -1,5 +1,6 @@
 package com.SpringBoot.Clinica.Service;
 
+import com.SpringBoot.Clinica.Cache.Service.CacheUserService;
 import com.SpringBoot.Clinica.Entity.UserEntity;
 import com.SpringBoot.Clinica.Repository.UserRepository;
 import com.SpringBoot.Clinica.Service.Mapper.UserMapper;
@@ -19,12 +20,16 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.IllegalFormatException;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
 public class UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+
+    @Autowired
+    private CacheUserService cacheService;
 
     private UserRepository userRepository;
     private UserMapper userMapper;
@@ -41,8 +46,15 @@ public class UserService {
      * @operation: retrieve all
      * @Return: UserDTO List
      * */
-    @Cacheable(cacheNames = "users", key = "'findAll'")
+
     public List<UserDTO> findAll(){
+
+        /**
+         * if the user list exists in the cache, then return the cache value
+         * */
+        if(this.cacheService.findAll() != null)
+            return this.cacheService.findAll();
+
 
         List <UserDTO> response =  new ArrayList<>();
         Iterable<UserEntity> iterable = this.userRepository.findAll();
@@ -57,12 +69,18 @@ public class UserService {
             }
         });
 
-
-
         LOGGER.trace(String.format("Info : UserService : findAll : "+LocalDateTime.now()));
 
+        /**
+         * insert the list in the cache
+         * */
+        this.cacheService.insert(CacheUserService.FIND_ALL_KEY,response);
         return response;
 
+    }
+
+    private void updateList(List<UserDTO> list){
+        this.cacheService.insert(CacheUserService.FIND_ALL_KEY,list);
     }
 
     /**
@@ -70,7 +88,6 @@ public class UserService {
      * @param: UserRequestDTO
      * @return: UserDTO
      * */
-    @CacheEvict(cacheNames = "users",allEntries = true)
     public UserDTO save(UserRequestDTO userRequestDTO) throws Exception {
         UserEntity userSave = null;
         UserDTO response;
@@ -83,6 +100,7 @@ public class UserService {
             throw new RuntimeException(e);
         }
 
+
         LOGGER.trace(String.format("Info : UserService : save : "+LocalDateTime.now()) + " : ",userSave);
 
         return response;
@@ -93,10 +111,17 @@ public class UserService {
      * @param: UserDTO
      * @return: UserDTO
      * */
-    @CacheEvict(cacheNames = "users",allEntries = true)
     public UserDTO update(UserDTO userDTO){
         UserEntity userUpdate = null;
         try {
+            /**
+             * if the cache value exists, then update the cache
+             * */
+            if(this.cacheService.findById(userDTO.getId().toString()) !=null)
+                this.cacheService.update(userDTO.getId().toString(),userDTO);
+            else
+                System.out.println("NO ENTRA");
+
             userUpdate = this.userMapper.map(userDTO);
             this.userRepository.update(userUpdate);
             LOGGER.trace(String.format("Info : UserService : save : "+LocalDateTime.now()) + " : ",userUpdate);
@@ -106,17 +131,31 @@ public class UserService {
             throw new RuntimeException(e);
         }
     }
+
     /**
      * @operation: find user by id
      * @param: Integer
      * @return: UserDTO
      * */
-    @Cacheable(cacheNames = "users")
     public UserDTO findById(Integer id){
         try {
+
+            /**
+             * if the user list exists in the cache, then return the cache value
+             * */
+            if(this.cacheService.findById(id.toString()) != null){
+                System.out.println("cache");
+                LOGGER.trace(String.format("Info: UserService : findById : "+LocalDateTime.now()+ " : "));
+                return this.cacheService.findById(id.toString());
+            }
+
             UserEntity userEntity = this.userRepository.findById(id).get();
             UserDTO response = this.userMapper.map(userEntity);
             LOGGER.trace(String.format("Info: UserService : findById : "+LocalDateTime.now()+ " : ",response));
+            /**
+             * save the value in the cache
+             * */
+            this.cacheService.insert(response.getId().toString(),response);
 
             return response;
         } catch (Exception e) {
@@ -124,12 +163,12 @@ public class UserService {
             throw new RuntimeException(e);
         }
     }
+
     /**
      * @operation: exists user by id
      * @param: Integer
      * @return: Boolean
      * */
-
     public boolean existsById(Integer id){
         LOGGER.trace("Info : UserService : existsById : "+LocalDateTime.now()+" : ",id);
         return this.userRepository.existsById(id);
@@ -139,7 +178,6 @@ public class UserService {
      * @operation: count users
      * @return: Number
      * */
-
     public long count(){
         LOGGER.trace("Info : UserService : existsById : "+LocalDateTime.now());
         return this.userRepository.count();
@@ -150,11 +188,11 @@ public class UserService {
      * @param: Integer
      * @return: Boolean
      * */
-    @CacheEvict(value = "users", allEntries = true)
     public Boolean deleteById(Integer id){
 
         try{
             this.userRepository.deleteById(id);
+            this.cacheService.remove(id);
             LOGGER.trace("Info : UserRepository class : deleteById : "+LocalDateTime.now().toString() +" : ",true);
             return true;
         }catch (IllegalFormatException e){
@@ -173,10 +211,11 @@ public class UserService {
      * @param: UserDTO
      * @return: Boolean
      * */
-    @CacheEvict(value = "users", allEntries = true)
     public boolean delete(UserDTO userDTO){
         try {
             UserEntity user = this.userMapper.map(userDTO);
+            System.out.println("Eliminado : "+ user.getId());
+            this.cacheService.remove(user.getId());
             this.userRepository.delete(user);
             LOGGER.trace("Info : UserRepository class : delete : "+LocalDateTime.now().toString() +" : ",true);
             return true;
@@ -191,9 +230,11 @@ public class UserService {
      * @param: Integer List
      * @return: Boolean
      * */
-    @CacheEvict(value = "users", allEntries = true)
     public boolean deleteAllById(List<Integer> list ){
         this.userRepository.deleteAllById(list);
+        list.stream().forEach(e ->{
+           this.cacheService.remove(e);
+        });
         LOGGER.trace("Info : UserRepository class : deleteAllById : "+LocalDateTime.now());
         return true;
     }
@@ -206,6 +247,9 @@ public class UserService {
     @CacheEvict(value = "users", allEntries = true)
     public boolean deleteAll(List<UserEntity> list){
         this.userRepository.deleteAll(list);
+        list.stream().forEach(e ->{
+            this.cacheService.remove(e.getId());
+        });
         LOGGER.trace("Info : UserRepository class : deleteAll : "+LocalDateTime.now());
         return true;
     }
@@ -215,7 +259,7 @@ public class UserService {
      * @param: String username
      * @return: UserDTO
      * */
-    @Cacheable("users")
+    @Cacheable(cacheManager = "only_Entity",cacheNames = "users")
     public UserDTO findByUsername(String username){
        UserEntity user = this.userRepository.findByUsername(username).get();
 
