@@ -32,8 +32,8 @@
 
     - name: Create admin user with remote access
       mysql_user:
-        name: {{admin_user}}
-        password: {{admin_password}}
+        name: "{{admin_user}}"
+        password: "{{admin_password}}"
         priv: '*.*:ALL'
         host: '%'
         append_privs: yes
