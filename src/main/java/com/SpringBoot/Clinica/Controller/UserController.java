@@ -21,8 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class UserController implements UsersApiDelegate {
 
-    @Autowired
-    private CacheManager cacheManager;
+
 
     private UserService userService;
 
@@ -75,14 +74,7 @@ public class UserController implements UsersApiDelegate {
 
     @Override
     public ResponseEntity<UserListDTO> retriveAllUser() {
-        /**
-         * VISUALIZACION DE LA CACHE
-         * */
-        ConcurrentHashMap<?,?> cache = (ConcurrentHashMap<?, ?>) this.cacheManager.getCache("users").getNativeCache();
 
-        cache.forEach((key,object)->{
-            System.out.println(key + " --- "+ object);
-        });
 
         try {
             UserListDTO userListDTO = new UserListDTO().items(this.userService.findAll());
