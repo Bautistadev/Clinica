@@ -2,6 +2,10 @@
   hosts: node1
   become: yes
   tasks:
+    - name: Update Service
+      package:
+        update_cache: yes
+
     - name: Install Java
       package:
         name: openjdk-11-jdk
