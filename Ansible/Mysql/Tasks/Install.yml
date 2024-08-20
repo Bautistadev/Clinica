@@ -1,0 +1,15 @@
+- name: Installing Mysql
+  package:
+    name: "{{item}}"
+    state: present
+  loop:
+    - mysql-server
+    - mysql-client
+    - python3-mysqldb
+    - libmysqlclient-dev
+
+- name: Start mysql
+  service:
+    name: mysql
+    state: started
+    enabled: yes

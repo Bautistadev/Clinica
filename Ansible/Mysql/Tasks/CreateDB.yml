@@ -1,0 +1,6 @@
+- name: Creating database
+  mysql_db:
+    name: "{{db_name}}"
+    state: present
+    login_user: root
+    login_password: "{{root_password}}"
