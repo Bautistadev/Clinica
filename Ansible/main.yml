@@ -1,5 +1,5 @@
 - name: Clinica service Instalation
-  hosts: nodes
+  hosts: nodesService
   become: yes
   pre_tasks:
     - name: OS distribution
