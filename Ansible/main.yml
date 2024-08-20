@@ -1,0 +1,10 @@
+- name: Clinica service Instalation
+  hosts: nodes
+  become: yes
+  tasks:
+    - name: Update cache
+      apt:
+        update_cache: yes
+    - name: Distribution
+      debug:
+        msg: "Distribution : {{ansible_distribution_file_variety}}"
