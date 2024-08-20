@@ -1,5 +1,5 @@
 root_password: root
-admin_user: adminn
+admin_user: admin
 admin_password: admin
 db_name: testDB
 password_validation_policy: 1

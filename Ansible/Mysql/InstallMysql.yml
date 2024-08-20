@@ -1,7 +1,7 @@
 - name: Clinica service Instalation
-  hosts: nodesService
+  hosts: node1
   become: yes
-  vars_file:
+  vars_files:
     - ./Vars/mysql_vars.yml
   tasks:
     - name: Installing Mysql
