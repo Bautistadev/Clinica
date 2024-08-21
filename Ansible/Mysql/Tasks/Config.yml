@@ -1,0 +1,29 @@
+- name: set root user password
+  mysql_user:
+    name: root
+    password: "{{root_password}}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    host: localhost
+    login_user: root
+    login_password: "{{root_password}}"
+    state: present
+
+- name: Create admin user with remote access
+  mysql_user:
+    name: "{{admin_user}}"
+    password: "{{admin_password}}"
+    priv: '*.*:ALL'
+    host: '%'
+    append_privs: yes
+    login_user: root
+    login_password: "{{root_password}}"
+    state: present
+
+- name: Enable remote login to mysql
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regex: '^bind-address\s*=\s*127.0.0.1'
+    line: 'bind-address = 0.0.0.0'
+    backup: yes
+  notify:
+    - Restart mysql

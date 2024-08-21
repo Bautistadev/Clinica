@@ -1,0 +1,14 @@
+- name: Execute MySQL secure installation
+  expect:
+    command: mysql_secure_installation
+    responses:
+      'Enter password for user root:': "{{ root_password }}"
+      'Press y\|Y for Yes, any other key for No': 'Y'
+      'Please enter 0 = LOW, 1 = MEDIUM and 2 = STRONG': "{{ password_validation_policy }}"
+      'Change the password for root \? \(\(Press y\|Y for Yes, any other key for No\)': 'n'
+      'Remove anonymous users\? \(Press y\|Y for Yes, any other key for No\)': 'Y'
+      'Disallow root login remotely\? \(Press y\|Y for Yes, any other key for No\)': 'Y'
+      'Remove test database and access to it\? \(Press y\|Y for Yes, any other key for No\)': 'Y'
+      'Reload privilege tables now\? \(Press y\|Y for Yes, any other key for No\)': 'Y'
+  environment:
+    MYSQL_PWD: "{{ root_password }}"

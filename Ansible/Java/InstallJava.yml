@@ -1,0 +1,20 @@
+- name: Install Java
+  hosts: node1
+  become: yes
+  tasks:
+    - name: Update Service
+      package:
+        update_cache: yes
+
+    - name: Install Java
+      package:
+        name: openjdk-11-jdk
+        state: present
+
+    - name: Verify
+      command: java --version
+      register: java_version_output
+
+    - name:
+      debug:
+        var: java_version_output.stdout

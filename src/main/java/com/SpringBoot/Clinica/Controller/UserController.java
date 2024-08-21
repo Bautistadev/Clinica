@@ -20,8 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class UserController implements UsersApiDelegate {
 
-    @Autowired
-    private CacheManager cacheManager;
+
 
     @Autowired
     private CacheUserService cacheService;
@@ -78,14 +77,6 @@ public class UserController implements UsersApiDelegate {
 
     @Override
     public ResponseEntity<UserListDTO> retriveAllUser() {
-        /**
-         * VISUALIZACION DE LA CACHE
-         * */
-        ConcurrentHashMap<?,?> cache = (ConcurrentHashMap<?, ?>) this.cacheManager.getCache("users").getNativeCache();
-
-        cache.forEach((key,object)->{
-            System.out.println("key: "+key + " --- "+ object);
-        });
 
 
 

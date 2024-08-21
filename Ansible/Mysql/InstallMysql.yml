@@ -1,0 +1,20 @@
+- name: Clinica service Instalation
+  hosts: node1
+  become: yes
+  vars_files:
+    - ./Vars/mysql_vars.yml
+  tasks:
+    - name: Install mysql
+      include_tasks: Tasks/Install.yml
+    - name: Configuration mysql
+      include_tasks: Tasks/Config.yml
+    - name: Creating database
+      include_tasks: Tasks/CreateDB.yml
+    - name: Execute MySQL secure installation
+      include_tasks: Tasks/SecureInstalation.yml
+
+  handlers:
+    - name: Restart mysql
+      service:
+        name: mysql
+        state: restarted
