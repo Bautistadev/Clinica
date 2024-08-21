@@ -10,6 +10,7 @@
     - name: copy .jar
       copy:
         src: ../../target/Clinica-0.0.1-SNAPSHOT.jar
-        dest: /home/ubuntu
+        dest: /home/ubuntu/
+        remote_src: yes
     - name: execute
       command: java -jar /home/ubuntu/Clinica-0.0.1-SNAPSHOT.jar
