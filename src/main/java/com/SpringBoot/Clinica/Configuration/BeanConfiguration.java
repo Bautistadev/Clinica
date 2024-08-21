@@ -108,4 +108,5 @@ public class BeanConfiguration {
     public TelephoneRepository telephoneRepository(JdbcTemplate jdbcTemplate){
         return new TelephoneRepository(jdbcTemplate);
     }
+
 }

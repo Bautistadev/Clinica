@@ -37,7 +37,7 @@ public class CredentialService {
      * @param: CredentialRequestDTO
      * @return: CredentialDTO
      * */
-    @CacheEvict(cacheNames = "credentials",allEntries = true)
+    //@CacheEvict(cacheManager = "cacheManagerOnly", cacheNames = "credentials",allEntries = true)
     public CredentialDTO save(CredentialRequestDTO credentialRequestDTO){
         CredentialEntity credentialSave = null;
         CredentialDTO response = null;
@@ -59,7 +59,7 @@ public class CredentialService {
      * @param: Integer id
      * @return: CredentialDTO
      * */
-    @Cacheable(cacheNames = "credentials", key = "'findById'")
+   // @Cacheable(cacheManager = "cacheManagerOnly",cacheNames = "credentials", key = "'findById'")
     public CredentialDTO findById(Integer id){
         CredentialDTO response;
 
@@ -96,7 +96,7 @@ public class CredentialService {
      * @operation: findAll
      * @return: CredentialDTO
      * */
-   @Cacheable(cacheNames = "credentials", key = "'findAll'")
+   //@Cacheable(cacheManager = "cacheManagerList",cacheNames = "credentials", key = "'findAll'")
    public List<CredentialDTO> findAll(){
        List<CredentialDTO> response = new ArrayList<>();
        Iterable<CredentialEntity> iterable = this.credentialRepository.findAll();
@@ -120,7 +120,7 @@ public class CredentialService {
      * @param: CredentialDTO
      * @return: Boolean
      * */
-    @CacheEvict(cacheNames = "credentials", allEntries = true)
+   // @CacheEvict(cacheManager = "cacheManagerOnly",cacheNames = "credentials", allEntries = true)
     public Boolean deleteById(Integer id){
         try {
             this.credentialRepository.deleteById(id);
@@ -138,7 +138,7 @@ public class CredentialService {
      * @param: CredentialDTO
      * @return: Boolean
      * */
-   @CacheEvict(cacheNames = "credentials", allEntries = true)
+  // @CacheEvict(cacheManager = "cacheManagerOnly",cacheNames = "credentials", allEntries = true)
    public Boolean delete(CredentialDTO credentialDTO){
        try {
            this.credentialRepository.delete(this.credentialMapper.map(credentialDTO));
@@ -156,7 +156,7 @@ public class CredentialService {
      * @param: CredentialDTO
      * @return: CredentialDTO
      * */
-   @CacheEvict(cacheNames = "credentials", allEntries =  true)
+   //@CacheEvict(cacheManager = "cacheManagerOnly",cacheNames = "credentials", allEntries =  true)
    public CredentialDTO update (CredentialDTO credentialDTO){
        try{
            this.credentialRepository.update(this.credentialMapper.map(credentialDTO));

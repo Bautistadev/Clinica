@@ -35,6 +35,7 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
     private String DELETE_BY_ID;
     @Value("${spring.db.doctor.countDoctor}")
     private String COUNT_DOCTOR;
+
     @Value("${spring.db.doctor.update}")
     private String UPDATE;
 
