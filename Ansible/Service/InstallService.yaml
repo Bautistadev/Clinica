@@ -7,10 +7,12 @@
         update_cache: yes
     - name: verify java
       command: java --version
-    - name: copy .jar
-      copy:
-        src: ../../target/Clinica-0.0.1-SNAPSHOT.jar
-        dest: /home/ubuntu/
-        remote_src: yes
+    - name: clone repository
+      git:
+        repo: https://github.com/Bautistadev/Clinica.git
+        dest: /home/ubuntu
+        version: cachesConfi
+        update: yes
+      when: not ansible_check_mode
     - name: execute
       command: java -jar /home/ubuntu/Clinica-0.0.1-SNAPSHOT.jar
