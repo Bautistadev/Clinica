@@ -18,3 +18,16 @@
     - name:
       debug:
         var: java_version_output.stdout
+
+    - name: Install Maven
+      package:
+        name: maven
+        state: present
+
+    - name: Verify Maven
+      command: mvn --version
+      register: maven_version_output
+
+    - name:
+      debug:
+        var: maven_version_output.stdout
