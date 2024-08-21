@@ -11,8 +11,8 @@
       git:
         repo: https://github.com/Bautistadev/Clinica.git
         dest: /home/ubuntu/Clinica
-        version: cachesConfi
+        version: feature/cachesConfi
         update: yes
       when: not ansible_check_mode
-    - name: execute
-      command: java -jar /home/ubuntu/Clinica-0.0.1-SNAPSHOT.jar
+    #- name: execute
+     # command: java -jar /home/ubuntu/Clinica-0.0.1-SNAPSHOT.jar
