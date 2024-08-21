@@ -10,7 +10,7 @@
     - name: clone repository
       git:
         repo: https://github.com/Bautistadev/Clinica.git
-        dest: /home/ubuntu
+        dest: /home/ubuntu/Clinica
         version: cachesConfi
         update: yes
       when: not ansible_check_mode
