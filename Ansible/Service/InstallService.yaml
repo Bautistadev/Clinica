@@ -1,0 +1,15 @@
+- name: Install api service
+  hosts: node2
+  become: yes
+  tasks:
+    - name: update cache
+      apt:
+        update_cache: yes
+    - name: verify java
+      command: java --version
+    - name: copy .jar
+      copy:
+        src: ../../target/Clinica-0.0.1-SNAPSHOT.jar
+        dest: /home/ubuntu
+    - name: execute
+      command: java -jar /home/ubuntu/Clinica-0.0.1-SNAPSHOT.jar
