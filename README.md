@@ -9,26 +9,32 @@ Implementar una aplicación para la gestión de una clínica puede transformar s
 ## Características
 ### 1. **Automatización de Procesos** 🤖
 **Tradicional:** Los registros y procesos se manejan manualmente, lo que puede llevar a errores y duplicidad de datos.
+
 **Con la Aplicación:** Automatiza procesos como la gestión de pacientes, citas, recetas y medicamentos, reduciendo errores y mejorando la eficiencia operativa.
 
 ### 2. **Acceso Rápido a la Información** 📊
 **Tradicional:** La información está dispersa, dificultando el acceso rápido y la coordinación.
+
 **Con la Aplicación:** Centraliza la información, permitiendo un acceso rápido a historiales médicos, citas y datos de pacientes, mejorando la toma de decisiones.
 
 ### 3. **Mejora en la Gestión de Citas** 📅
 **Tradicional:** La gestión de citas puede ser manual y propensa a errores.
+
 **Con la Aplicación:** Permite a los pacientes reservar, reprogramar o cancelar citas en línea y recibe recordatorios automáticos para reducir ausencias.
 
 ### 4. **Seguridad y Privacidad de los Datos** 🔒
 **Tradicional:** Los datos en papel son vulnerables y la protección puede ser insuficiente.
+
 **Con la Aplicación:** Implementa autenticación JWT y permisos basados en roles para proteger los datos sensibles y garantizar su privacidad.
 
 ### 5. **Generación de Reportes y Análisis** 📈
 **Tradicional:** La recopilación de datos para reportes es lenta y laboriosa.
+
 **Con la Aplicación:** Ofrece capacidades de análisis y generación de reportes automáticos para obtener información detallada sobre el funcionamiento de la clínica.
 
 ### 6. **Integración con Otros Sistemas** 🔗
 **Tradicional:** La integración con otros sistemas puede ser limitada.
+
 **Con la Aplicación:** Facilita la integración con sistemas de laboratorio, farmacias y seguros médicos, creando un flujo de trabajo más cohesivo.
 
 
@@ -89,5 +95,8 @@ Implementar una aplicación para la gestión de una clínica puede transformar s
 ## Base de datos:
 
 ![Untitled](https://github.com/user-attachments/assets/09dbaf22-daad-49b3-beb9-606bcdb395a6)
+
+
+
 
    
