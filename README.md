@@ -97,6 +97,12 @@ Implementar una aplicación para la gestión de una clínica puede transformar s
 ![Untitled](https://github.com/user-attachments/assets/09dbaf22-daad-49b3-beb9-606bcdb395a6)
 
 
+## Interface de Api 🗄️
+<img width="1557" alt="Captura de pantalla 2024-09-02 a la(s) 20 31 45" src="https://github.com/user-attachments/assets/dfcfcbd0-0c53-4f5d-bc2d-1a8edb215af6">
 
+## Generacion de credenciales JWT 🪪
+<img width="1070" alt="Captura de pantalla 2024-09-02 a la(s) 20 32 57" src="https://github.com/user-attachments/assets/09bad610-190c-4b44-995a-6222ce6f3b91">
 
-   
+## Inconventientes y difcultades 
+Durante el desarrollo de la api, principalmente haciendo foco en la manipulación de la base de datos. El uso de la librería "Jdbc" no ha sido la opción más factible y viable en cuanto a tiempo que conlleva la codificación de la operaciones básicas(getAll, Save, findById, etc...) de las clases repositorio y principalmente en los casos de consultas anidadas entre tablas (INNER JOIN).
+Como solución a este problema, en próximas versiones, se optará por migrar las consultas entre la API y la Base de Datos desde "Jdbc" a "Jparepository".
