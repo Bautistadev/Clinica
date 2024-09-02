@@ -14,7 +14,8 @@
         version: feature/cachesConfi
         update: yes
       when: not ansible_check_mode
-    - name: Install Application
-      command: mvn -f /home/ubuntu/Clinica/pom.xml install
+    - name: Dependency resolve
+      command: mvn -f /home/ubuntu/Clinica/pom.xml dependecy:resolve
+    - name: Package app
     #- name: execute
      # command: java -jar /home/ubuntu/Clinica-0.0.1-SNAPSHOT.jar

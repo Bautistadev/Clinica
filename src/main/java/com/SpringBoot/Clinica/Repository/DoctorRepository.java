@@ -43,6 +43,13 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
+
+
+
+
+
+
     /**
      * @operation: save
      * @param: DoctorEntity
@@ -68,10 +75,16 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
         return entity;
     }
 
+
+
+
+
     @Override
     public <S extends DoctorEntity> Iterable<S> saveAll(Iterable<S> entities) {
         return null;
     }
+
+
 
     /**
      * @operation: find by id
@@ -112,6 +125,15 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
         return Optional.of(doctor);
     }
 
+
+
+
+
+
+
+
+
+
     /**
      * @operation: exists by id
      * @param: Integer
@@ -130,6 +152,14 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
 
         },integer);
     }
+
+
+
+
+
+
+
+
 
     /**
      * @operation: find all doctos
@@ -170,10 +200,26 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
         return this.jdbcTemplate.query(SELECT_ALL,rowMapper);
     }
 
+
+
+
+
+
+
+
+
     @Override
     public Iterable<DoctorEntity> findAllById(Iterable<Integer> integers) {
         return null;
     }
+
+
+
+
+
+
+
+
 
     /**
      * @operation: count all Doctors
@@ -185,6 +231,14 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
         return this.jdbcTemplate.queryForObject(COUNT_DOCTOR,Long.class);
     }
 
+
+
+
+
+
+
+
+
     /**
      * @operation: delete by DoctorEntity id
      * @param: Integer
@@ -195,6 +249,14 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
         this.jdbcTemplate.update(DELETE_BY_ID,integer);
     }
 
+
+
+
+
+
+
+
+
     /**
      * @operation: delete by DoctorEntity object
      * @param: DoctorEntity
@@ -204,6 +266,14 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
     public void delete(DoctorEntity entity) {
         this.deleteById(entity.getId());
     }
+
+
+
+
+
+
+
+
 
     /**
      * @operation: delete all by id
@@ -217,6 +287,14 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
             this.deleteById(Integer.parseInt(iterator.next().toString()));
     }
 
+
+
+
+
+
+
+
+
     @Override
     public void deleteAll(Iterable<? extends DoctorEntity> entities) {
 
@@ -226,6 +304,14 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
     public void deleteAll() {
 
     }
+
+
+
+
+
+
+
+
 
     private String getFilterQuery(String query, Map<String,String> filter){
         String SELECT_FILTER = query.concat(" WHERE ");
@@ -244,6 +330,14 @@ public class DoctorRepository implements CrudRepository<DoctorEntity,Integer> {
 
         return SELECT_FILTER;
     }
+
+
+
+
+
+
+
+
 
     /**
      * @operation: Filter find

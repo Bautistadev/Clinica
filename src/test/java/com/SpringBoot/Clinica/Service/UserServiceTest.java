@@ -36,9 +36,6 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
-
-
-
     @Autowired
     private UserMapper userMapper;
 
