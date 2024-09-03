@@ -2,7 +2,7 @@
 
 ## Índice
 1. [Descripción](#descripción)
-2. [¿Por que una aplicacion para la gestion de una Clínica?](#¿por-que-una-aplicacion-para-la-gestion-de-una-Clínica?)
+2. [¿Por que una aplicacion para la gestion de una Clínica?](#¿Por-que-una-aplicacion-para-la-gestion-de-una-Clínica?)
 3. [Características](#Características)
 4. [Tecnologías utilizadas](#tecnologías-utilizadas)
 5. [Requisitos Previos](#requisitos-previos)
