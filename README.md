@@ -6,7 +6,7 @@
 3. [Características](#Características)
 4. [Tecnologías utilizadas](#tecnologías-utilizadas)
 5. [Requisitos Previos](#requisitos_previos)
-6. [Configuración](#configuracion)
+6. [Configuración](#configuración)
 7. [Modelado de base de datos](#base-de-datos)
 
 ## Descripción
