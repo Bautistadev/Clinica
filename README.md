@@ -1,9 +1,18 @@
 # Clínica API 🩺
 
+## Índice
+1. [Descripción](#descripción)
+2. [¿Por que una aplicacion para la gestion de una Clínica?](#¿Por_que_una_aplicacion_para_la_gestion_de_una_Clínica?)
+3. [Características](#Características)
+4. [Tecnologías utilizadas](#tecnologías-utilizadas)
+5. [Requisitos Previos](#requisitos_previos)
+6. [Configuración](#configuracion)
+7. [Modelado de base de datos](#base-de-datos)
+
 ## Descripción
 Este proyecto es una API desarrollada en Java Spring Boot para la gestión de una clínica genérica. La API permite la administración de pacientes, doctores, medicamentos, recetas y otros aspectos relacionados con la operación de una clínica.
 
-## ¿Por que una aplicacion para la gestion de una Clīnica?
+## ¿Por que una aplicacion para la gestion de una Clínica?
 Implementar una aplicación para la gestión de una clínica puede transformar significativamente la manera en que opera tradicionalmente, mejorando la eficiencia, precisión y accesibilidad.
 
 ## Características
